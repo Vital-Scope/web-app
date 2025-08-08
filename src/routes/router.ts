@@ -1,8 +1,8 @@
 import { createBrowserRouter, type RouteObject } from "react-router";
-import App from "../App";
 import { AuthPage } from "../pages/auth";
 import ProtectedRoute from "./ProtectedRoute";
 import Layout from "../components/Layout";
+import { MainPage } from "../pages/main";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -14,7 +14,7 @@ const publicRoutes: RouteObject[] = [
 const privateRoutes: RouteObject[] = [
   {
     path: "/",
-    Component: App,
+    Component: MainPage,
   },
 ];
 

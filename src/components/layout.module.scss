@@ -24,6 +24,7 @@
   animation-duration: 20;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  z-index: -1000;
 }
 
 .background > span:nth-child(0) {
