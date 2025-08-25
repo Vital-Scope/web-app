@@ -1,8 +1,12 @@
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 import styles from "./layout.module.scss";
+import { MenuBar } from "../menu";
 
 const Layout = () => (
   <div className={styles.background}>
+    <nav className="fixed left-1/2 w-md -translate-x-1/2">
+      <MenuBar />
+    </nav>
     <span></span>
     <span></span>
     <span></span>
@@ -15,7 +19,9 @@ const Layout = () => (
     <span></span>
     <span></span>
     <span></span>
-    <Outlet />
+    <div className="pt-12 overflow-hidden overflow-y-scroll">
+      <Outlet />
+    </div>
   </div>
 );
 

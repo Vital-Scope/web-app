@@ -1,20 +1,13 @@
 import { createBrowserRouter, type RouteObject } from "react-router";
 import { AuthPage } from "../pages/auth";
 import ProtectedRoute from "./ProtectedRoute";
-import Layout from "../components/Layout";
-import { MainPage } from "../pages/main";
+import Layout from "../components/layout/Layout";
+import privateRoutes from "./privateRoutes";
 
 const publicRoutes: RouteObject[] = [
   {
     path: "/auth",
     Component: AuthPage,
-  },
-];
-
-const privateRoutes: RouteObject[] = [
-  {
-    path: "/",
-    Component: MainPage,
   },
 ];
 
@@ -35,4 +28,8 @@ const router = createBrowserRouter([
   },
 ]);
 
+export const links = privateRoutes.map((el) => ({
+  key: el.path,
+  path: el.path,
+}));
 export default router;
