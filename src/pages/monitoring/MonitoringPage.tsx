@@ -40,7 +40,7 @@ const Monitoring = () => {
   }, [Data]);
 
   const [layout, setLayout] = useState<any>({
-    title: { text: "ГРАФИК" },
+    title: { text: "Мониторинг", font: { color: "white" } },
     paper_bgcolor: "rgba(255, 255, 255, 0.3)",
     plot_bgcolor: "transparent",
     xaxis: {
@@ -122,7 +122,7 @@ const Monitoring = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center">
+    <div className="flex justify-center bg-sky-800">
       <Plot
         data={[
           {
@@ -147,7 +147,7 @@ const Monitoring = () => {
         layout={layout}
         config={{ scrollZoom: true, displaylogo: false }}
         onRelayout={handleRelayout}
-        className=""
+        className="w-full"
       />
     </div>
   );

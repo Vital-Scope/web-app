@@ -19,7 +19,7 @@ const Layout = () => (
     <span></span>
     <span></span>
     <span></span>
-    <div className="pt-12 overflow-hidden overflow-y-scroll text-rose-300">
+    <div className="pt-12 px-10 overflow-hidden overflow-y-scroll text-rose-300">
       <Outlet />
     </div>
   </div>
