@@ -7,19 +7,8 @@ const Layout = () => (
     <nav className="fixed left-1/2 w-md -translate-x-1/2">
       <MenuBar />
     </nav>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <div className="pt-12 px-10 overflow-hidden overflow-y-scroll text-rose-300">
+    {new Array(12).fill(0).map(() => <span></span>)}
+    <div className="py-12 px-10 overflow-hidden text-rose-300">
       <Outlet />
     </div>
   </div>
