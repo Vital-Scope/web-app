@@ -4,11 +4,13 @@ import privateRoutes from "../../routes/privateRoutes";
 import { useCallback } from "react";
 import { useNavigate } from "react-router";
 
-const menuItems = privateRoutes.map((route) => ({
-  key: route.path,
-  path: route.path,
-  label: route.label,
-}));
+const menuItems = privateRoutes
+  .filter((route) => route.isMenu)
+  .map((route) => ({
+    key: route.path,
+    path: route.path,
+    label: route.label,
+  }));
 
 const MenuBar: React.FC = () => {
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ const MenuBar: React.FC = () => {
     <Menu
       mode="horizontal"
       theme="dark"
-      className="rounded-xl !bg-black/30 select-none"
+      className="rounded-xl !bg-black/30 select-none w-max"
       onSelect={onSelectHandler}
       items={menuItems}
     />

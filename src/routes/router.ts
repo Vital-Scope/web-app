@@ -3,6 +3,7 @@ import { AuthPage } from "../pages/auth";
 import ProtectedRoute from "./ProtectedRoute";
 import Layout from "../components/layout/Layout";
 import privateRoutes from "./privateRoutes";
+import { DashboardPage } from "../pages/dashboard";
 
 const publicRoutes: RouteObject[] = [
   {
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        Component: ProtectedRoute,
+        Component: DashboardPage,
       },
     ],
   },
@@ -32,4 +33,5 @@ export const links = privateRoutes.map((el) => ({
   key: el.path,
   path: el.path,
 }));
+
 export default router;

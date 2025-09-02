@@ -1,0 +1,136 @@
+// Базовые цвета темной темы
+$dark-bg: #000 !default;
+$dark-text: #fff !default;
+$dark-border: #333 !default;
+$dark-accent: #1890ff !default; // синий акцентный цвет
+$dark-secondary: #1a1a1a !default;
+$dark-hover: #2a2a2a !default;
+$dark-muted: #999 !default;
+$dark-disabled: #666 !default;
+
+.table {
+  :global {
+    .ant-table {
+      background-color: $dark-bg;
+      color: $dark-text;
+      border: 1px solid $dark-border;
+      
+      .ant-table-thead > tr > th {
+        background-color: $dark-secondary;
+        color: $dark-text;
+        border-bottom: 1px solid $dark-border;
+        font-weight: 600;
+        
+        &:hover {
+          background-color: $dark-hover;
+        }
+      }
+      
+      .ant-table-tbody > tr {
+        background-color: $dark-bg;
+        color: $dark-text;
+        
+        &:hover > td {
+          background-color: $dark-accent !important;
+          color: $dark-text;
+        }
+        
+        > td {
+          border-bottom: 1px solid $dark-border;
+          background-color: $dark-bg;
+          color: $dark-text;
+        }
+        
+        &.ant-table-row-selected > td {
+          background-color: $dark-secondary;
+        }
+      }
+      
+      .ant-table-placeholder {
+        background-color: $dark-bg;
+        color: $dark-muted;
+        
+        &:hover > td {
+          background-color: $dark-bg;
+        }
+      }
+    }
+    
+    .ant-table-pagination {
+      .ant-pagination-item {
+        background-color: $dark-secondary;
+        border-color: $dark-border;
+        
+        a {
+          color: $dark-text;
+        }
+        
+        &:hover {
+          border-color: $dark-accent;
+          
+          a {
+            color: $dark-accent;
+          }
+        }
+        
+        &.ant-pagination-item-active {
+          background-color: $dark-accent;
+          border-color: $dark-accent;
+          
+          a {
+            color: $dark-text;
+          }
+        }
+      }
+      
+      .ant-pagination-prev,
+      .ant-pagination-next {
+        .ant-pagination-item-link {
+          background-color: $dark-secondary;
+          border-color: $dark-border;
+          color: $dark-text;
+          
+          &:hover {
+            border-color: $dark-accent;
+            color: $dark-accent;
+          }
+        }
+      }
+      
+      .ant-pagination-disabled {
+        .ant-pagination-item-link {
+          color: $dark-disabled !important;
+          border-color: $dark-border !important;
+        }
+      }
+    }
+    
+    .ant-table-filter-trigger {
+      color: $dark-text;
+      
+      &:hover {
+        color: $dark-accent;
+      }
+    }
+    
+    .ant-table-selection {
+      .ant-checkbox-wrapper {
+        color: $dark-text;
+        
+        .ant-checkbox {
+          .ant-checkbox-inner {
+            background-color: $dark-secondary;
+            border-color: $dark-border;
+          }
+          
+          &.ant-checkbox-checked {
+            .ant-checkbox-inner {
+              background-color: $dark-accent;
+              border-color: $dark-accent;
+            }
+          }
+        }
+      }
+    }
+  }
+}

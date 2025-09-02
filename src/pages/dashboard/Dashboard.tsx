@@ -1,6 +1,4 @@
-
-
-const MainPage = () => {
+const DashboardPage = () => {
 
   return (
     <div>
@@ -10,4 +8,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default DashboardPage;
