@@ -1,9 +1,8 @@
 const DashboardPage = () => {
 
   return (
-    <div>
-      asdasd
-      <p>asd</p>
+    <div className="grid grid-cols-4 md:grid-cols-3 gap-6">
+      
     </div>
   );
 };

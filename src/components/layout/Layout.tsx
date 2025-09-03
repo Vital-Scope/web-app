@@ -4,11 +4,11 @@ import { MenuBar } from "../menu";
 
 const Layout = () => (
   <div className={styles.background}>
-    <nav className="fixed left-1/2 w-md -translate-x-1/2">
+    <nav className="fixed left-1/2 w-md -translate-x-1/2  z-40">
       <MenuBar />
     </nav>
     {new Array(12).fill(0).map(() => <span></span>)}
-    <div className="py-12 px-10 overflow-hidden text-rose-300">
+    <div className="py-14 px-10 overflow-y-auto text-rose-300 font-sans">
       <Outlet />
     </div>
   </div>

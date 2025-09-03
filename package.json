@@ -17,7 +17,6 @@
     "axios": "^1.11.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",
-    "material-react-table": "^3.2.1",
     "plotly.js": "^3.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
