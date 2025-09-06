@@ -1,59 +1,36 @@
-import { Select } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchInput, SortSelect } from "../../components/ui";
 import DashboardItem from "./ui/Item";
-import type { DefaultOptionType } from "antd/es/select";
 import { useState } from "react";
 import ModalForm from "./ui/ModalForm";
 import { Button } from "../../components/button";
 
-const filters = ["lastName", "firstName", "createdAt"] as const;
-type filtersType = (typeof filters)[number];
-
-const options: DefaultOptionType[] = [
-  {
-    label: "Фамилия",
-    value: "lastname",
-  },
-  {
-    label: "Имя",
-    value: "firstName",
-  },
-  {
-    label: "По дате добавления",
-    value: "createdAt",
-  },
+const sortOptions = [
+  { value: "lastName", label: "По фамилии" },
+  { value: "firstName", label: "По имени" },
+  { value: "createdAt", label: "По дате добавления" },
 ];
 
 const PatientsPage = () => {
-  const [filter, setFilter] = useState<filtersType>("lastName");
+  const [sortBy, setSortBy] = useState("lastName");
+  const [search, setSearch] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const openModal = () => {
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   return (
-    <div className="relative">
-      <div className="flex items-center justify-between">
-        <Select
-          size="middle"
-          className="w-40"
-          options={options}
-          onChange={(val) => setFilter(val)}
-          variant="outlined"
+    <div className="relative w-full max-w-6xl mx-auto py-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 w-full">
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder="Поиск по фамилии..."
         />
-        <div className="relative w-1/2 text-white">
-          <SearchOutlined className="absolute top-[5px] left-1" />
-          <input
-            type="text"
-            placeholder="Поиск..."
-            className="w-full rounded-md pr-2 pl-6 outline-rose-200/50 focus:outline-2"
-          />
-        </div>
+        <SortSelect
+          value={sortBy}
+          onChange={setSortBy}
+          options={sortOptions}
+        />
       </div>
       <div className="mt-2 mb-4 border-b-2 border-rose-200/50" />
       <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
