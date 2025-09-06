@@ -8,7 +8,7 @@ const DashboardItem = () => {
   return (
     <div
       className={clsx(
-        "grid cursor-pointer grid-cols-[1fr_3fr] items-center rounded-md bg-gray-700/50 p-2 text-rose-200 outline-1 outline-rose-200/50 drop-shadow-2xl transition-all",
+        "grid cursor-pointer grid-cols-[1fr_3fr] items-center rounded-md bg-gray-700/50 p-2 text-rose-100 outline-1 outline-rose-200/50 drop-shadow-2xl transition-all",
         styles.animation,
       )}
     >

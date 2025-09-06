@@ -1,14 +1,17 @@
 import { Outlet } from "react-router-dom";
 import styles from "./layout.module.scss";
 import { MenuBar } from "../menu";
+import clsx from "clsx";
 
 const Layout = () => (
-  <div className={styles.background}>
-    <nav className="fixed left-1/2 w-md -translate-x-1/2  z-40">
+  <div className={clsx(styles.background)}>
+    <nav className="fixed top-1 left-1/2 z-40 w-md -translate-x-1/2">
       <MenuBar />
     </nav>
-    {new Array(12).fill(0).map(() => <span></span>)}
-    <div className="py-14 px-10 overflow-y-auto text-rose-300 font-sans">
+    {new Array(12).fill(0).map(() => (
+      <span className="absolute"></span>
+    ))}
+    <div className="h-[calc(100vh-60px)] mt-[60px] overflow-y-auto px-10 pb-14 font-sans text-rose-300 overflow-auto">
       <Outlet />
     </div>
   </div>
