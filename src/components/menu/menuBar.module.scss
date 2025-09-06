@@ -1,6 +1,25 @@
 :global {
-  .ant-menu-item-selected {
-    background-color: #2f6faf71 !important;
+  .ant-menu {
+    font-family: 'Montserrat', Arial, sans-serif !important;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    background: #232946cc !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 16px 0 #18122b30;
+  }
+  .ant-menu-item {
+    transition: box-shadow 0.2s, background 0.2s;
     border-radius: 10px !important;
+  }
+  .ant-menu-item-selected {
+    background-color: #E9456080 !important;
+    color: #fff !important;
+    box-shadow: 0 0 8px 2px #E9456040;
+    border-radius: 10px !important;
+  }
+  .ant-menu-item:hover:not(.ant-menu-item-selected) {
+    background: #3A86FF33 !important;
+    box-shadow: 0 0 8px 2px #3A86FF33;
+    color: #fff !important;
   }
 }

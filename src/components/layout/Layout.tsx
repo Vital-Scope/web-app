@@ -1,25 +1,17 @@
 import { Outlet } from "react-router-dom";
 import styles from "./layout.module.scss";
 import { MenuBar } from "../menu";
+import clsx from "clsx";
 
 const Layout = () => (
-  <div className={styles.background}>
-    <nav className="fixed left-1/2 w-md -translate-x-1/2">
+  <div className={clsx(styles.background)}>
+    <nav className="fixed top-1 left-1/2 z-40 -translate-x-1/2">
       <MenuBar />
     </nav>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <div className="pt-12 overflow-hidden overflow-y-scroll">
+    {new Array(12).fill(0).map((_, idx) => (
+      <span key={idx} className="absolute"></span>
+    ))}
+    <div className="h-[calc(100vh-60px)] mt-[60px] overflow-y-auto px-10 pb-14 font-sans text-rose-300 overflow-auto">
       <Outlet />
     </div>
   </div>

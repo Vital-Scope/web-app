@@ -1,1 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap');
 @import "tailwindcss";
+
+@layer utilities {
+  .animate-my-scale {
+    animation: my-scale-animation 0.5s ease-in-out;
+  }
+
+  @keyframes my-scale-animation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}

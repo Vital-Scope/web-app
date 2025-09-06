@@ -4,15 +4,16 @@
   }
 }
 
+
 .background {
   position: fixed;
   width: 100vw;
   height: 100vh;
   top: 0;
   left: 0;
-  background: #1b0c4d;
+  background: #18122B;
   overflow: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .background > span {
@@ -28,8 +29,9 @@
   z-index: -1000;
 }
 
+// Мягкий розовый
 .background > span:nth-child(0) {
-  color: #e45a84;
+  color: #E94560;
   top: 79%;
   left: 77%;
   animation-duration: 249s;
@@ -37,8 +39,9 @@
   transform-origin: -11vw 5vh;
   box-shadow: 16vmin 0 2.651452832982032vmin currentColor;
 }
+// Светло-фиолетовый
 .background > span:nth-child(1) {
-  color: #ffacac;
+  color: #B8C1EC;
   top: 1%;
   left: 28%;
   animation-duration: 40s;
@@ -46,8 +49,9 @@
   transform-origin: 9vw 25vh;
   box-shadow: -16vmin 0 2.2932578455505546vmin currentColor;
 }
+// Голубой
 .background > span:nth-child(2) {
-  color: #583c87;
+  color: #3A86FF;
   top: 3%;
   left: 25%;
   animation-duration: 48s;
@@ -55,8 +59,9 @@
   transform-origin: -12vw -2vh;
   box-shadow: 16vmin 0 2.8213462369510167vmin currentColor;
 }
+// Бирюзовый
 .background > span:nth-child(3) {
-  color: #ffacac;
+  color: #8AC6D1;
   top: 77%;
   left: 25%;
   animation-duration: 32s;
@@ -64,8 +69,9 @@
   transform-origin: 16vw 19vh;
   box-shadow: -16vmin 0 2.101406102090254vmin currentColor;
 }
+// Светло-фиолетовый
 .background > span:nth-child(4) {
-  color: #583c87;
+  color: #B8C1EC;
   top: 44%;
   left: 89%;
   animation-duration: 28s;
@@ -73,8 +79,9 @@
   transform-origin: 12vw -15vh;
   box-shadow: -16vmin 0 2.7873746586861685vmin currentColor;
 }
+// Мягкий розовый
 .background > span:nth-child(5) {
-  color: #e45a84;
+  color: #E94560;
   top: 58%;
   left: 90%;
   animation-duration: 15s;
@@ -82,8 +89,9 @@
   transform-origin: -17vw -8vh;
   box-shadow: 16vmin 0 2.229574477167521vmin currentColor;
 }
+// Голубой
 .background > span:nth-child(6) {
-  color: #583c87;
+  color: #3A86FF;
   top: 17%;
   left: 84%;
   animation-duration: 239s;
@@ -91,8 +99,9 @@
   transform-origin: -14vw -6vh;
   box-shadow: -16vmin 0 2.2250223544383516vmin currentColor;
 }
+// Бирюзовый
 .background > span:nth-child(7) {
-  color: #ffacac;
+  color: #8AC6D1;
   top: 1%;
   left: 85%;
   animation-duration: 35s;
@@ -100,8 +109,9 @@
   transform-origin: -19vw 15vh;
   box-shadow: -16vmin 0 2.4869026750760024vmin currentColor;
 }
+// Светло-фиолетовый
 .background > span:nth-child(8) {
-  color: #583c87;
+  color: #B8C1EC;
   top: 52%;
   left: 55%;
   animation-duration: 142s;
@@ -109,8 +119,9 @@
   transform-origin: 15vw 19vh;
   box-shadow: -16vmin 0 2.9247431724535917vmin currentColor;
 }
+// Мягкий розовый
 .background > span:nth-child(9) {
-  color: #e45a84;
+  color: #E94560;
   top: 61%;
   left: 55%;
   animation-duration: 267s;
@@ -118,8 +129,9 @@
   transform-origin: -7vw -16vh;
   box-shadow: -16vmin 0 2.111163786121093vmin currentColor;
 }
+// Голубой
 .background > span:nth-child(10) {
-  color: #e45a84;
+  color: #3A86FF;
   top: 10%;
   left: 84%;
   animation-duration: 297s;
@@ -127,8 +139,9 @@
   transform-origin: 3vw -10vh;
   box-shadow: 16vmin 0 2.0724674255413067vmin currentColor;
 }
+// Бирюзовый
 .background > span:nth-child(11) {
-  color: #583c87;
+  color: #8AC6D1;
   top: 48%;
   left: 76%;
   animation-duration: 190s;
