@@ -33,12 +33,7 @@ const ModalForm: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const onSubmit = (data: FormData) => {
     console.log(data);
-    reset({
-      age: null,
-      firstName: "",
-      information: "",
-      lastName: "",
-    });
+    reset();
     setAvatar(null);
   };
 
@@ -70,7 +65,7 @@ const ModalForm: React.FC<Props> = ({ isOpen, onClose }) => {
       onOk={handleSubmit(onSubmit)}
     >
       <form
-        className="mx-auto max-w-4xl rounded-lg bg-white p-8"
+        className="mx-auto max-w-4xl rounded-lg p-8"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="mb-8 flex flex-col items-center">

@@ -1,9 +1,10 @@
-import { Button, Input, Modal, Select } from "antd";
+import { Select } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import DashboardItem from "./ui/Item";
 import type { DefaultOptionType } from "antd/es/select";
 import { useState } from "react";
 import ModalForm from "./ui/ModalForm";
+import { Button } from "../../components/button";
 
 const filters = ["lastName", "firstName", "createdAt"] as const;
 type filtersType = (typeof filters)[number];
@@ -56,17 +57,12 @@ const PatientsPage = () => {
       </div>
       <div className="mt-2 mb-4 border-b-2 border-rose-200/50" />
       <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
-        {new Array(20).fill(0).map(() => (
-          <DashboardItem />
+        {new Array(20).fill(0).map((_, idx) => (
+          <DashboardItem key={idx}/>
         ))}
       </div>
       <ModalForm isOpen={isModalOpen} onClose={closeModal} />
-      <button
-        onClick={openModal}
-        className="bg-white-500/20 fixed right-10 bottom-5 h-10 w-24 rounded-md border-1 text-white transition-all hover:animate-pulse hover:cursor-pointer hover:text-white"
-      >
-        Добавить
-      </button>
+      <Button onClick={openModal} />
     </div>
   );
 };
