@@ -8,7 +8,7 @@ RUN npm ci
 
 # Копируем остальной код и собираем
 COPY . .
-RUN npm run build
+RUN node vite build
 
 # Стадия рантайма с nginx
 FROM nginx:1.25-alpine
