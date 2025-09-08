@@ -3,12 +3,12 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 # Кэшируем зависимости
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json ./
+RUN npm install
 
 # Копируем остальной код и собираем
 COPY . .
-RUN node vite build
+RUN npx vite build
 
 # Стадия рантайма с nginx
 FROM nginx:1.25-alpine
