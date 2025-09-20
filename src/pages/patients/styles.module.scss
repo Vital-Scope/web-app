@@ -1,12 +1,13 @@
-// Базовые цвета темной темы
-$dark-bg: #000 !default;
-$dark-text: #fff !default;
-$dark-border: #333 !default;
-$dark-accent: #1890ff !default; // синий акцентный цвет
-$dark-secondary: #1a1a1a !default;
-$dark-hover: #2a2a2a !default;
-$dark-muted: #999 !default;
-$dark-disabled: #666 !default;
+
+// Светлая палитра
+$light-bg: #FFFFFF !default;
+$light-text: #232946 !default;
+$light-border: #E3E8F0 !default;
+$light-accent: #3A86FF !default;
+$light-secondary: #F6F8FB !default;
+$light-hover: #F0F4FF !default;
+$light-muted: #B8C1EC !default;
+$light-disabled: #BFC9D9 !default;
 
 .animation {
   &:hover {
@@ -27,126 +28,132 @@ $dark-disabled: #666 !default;
 .table {
   :global {
     .ant-table {
-      background-color: $dark-bg;
-      color: $dark-text;
-      border: 1px solid $dark-border;
+
+  background-color: $light-bg;
+  color: $light-text;
+  border: 1px solid $light-border;
+
 
       .ant-table-thead > tr > th {
-        background-color: $dark-secondary;
-        color: $dark-text;
-        border-bottom: 1px solid $dark-border;
-        font-weight: 600;
+        background-color: $light-secondary;
+        color: $light-text;
+        border-bottom: 1px solid $light-border;
+        font-weight: 700;
 
         &:hover {
-          background-color: $dark-hover;
+          background-color: $light-hover;
         }
       }
 
+
       .ant-table-tbody > tr {
-        background-color: $dark-bg;
-        color: $dark-text;
+        background-color: $light-bg;
+        color: $light-text;
 
         &:hover > td {
-          background-color: $dark-accent !important;
-          color: $dark-text;
+          background-color: $light-hover !important;
+          color: $light-text;
         }
 
         > td {
-          border-bottom: 1px solid $dark-border;
-          background-color: $dark-bg;
-          color: $dark-text;
+          border-bottom: 1px solid $light-border;
+          background-color: $light-bg;
+          color: $light-text;
         }
 
         &.ant-table-row-selected > td {
-          background-color: $dark-secondary;
+          background-color: $light-secondary;
         }
       }
+
 
       .ant-table-placeholder {
-        background-color: $dark-bg;
-        color: $dark-muted;
+        background-color: $light-bg;
+        color: $light-muted;
 
         &:hover > td {
-          background-color: $dark-bg;
+          background-color: $light-bg;
         }
       }
     }
 
-    .ant-table-pagination {
-      .ant-pagination-item {
-        background-color: $dark-secondary;
-        border-color: $dark-border;
 
-        a {
-          color: $dark-text;
-        }
-
-        &:hover {
-          border-color: $dark-accent;
+      .ant-table-pagination {
+        .ant-pagination-item {
+          background-color: $light-secondary;
+          border-color: $light-border;
 
           a {
-            color: $dark-accent;
+            color: $light-text;
           }
-        }
-
-        &.ant-pagination-item-active {
-          background-color: $dark-accent;
-          border-color: $dark-accent;
-
-          a {
-            color: $dark-text;
-          }
-        }
-      }
-
-      .ant-pagination-prev,
-      .ant-pagination-next {
-        .ant-pagination-item-link {
-          background-color: $dark-secondary;
-          border-color: $dark-border;
-          color: $dark-text;
 
           &:hover {
-            border-color: $dark-accent;
-            color: $dark-accent;
+            border-color: $light-accent;
+
+            a {
+              color: $light-accent;
+            }
+          }
+
+          &.ant-pagination-item-active {
+            background-color: $light-accent;
+            border-color: $light-accent;
+
+            a {
+              color: $light-bg;
+            }
+          }
+        }
+
+        .ant-pagination-prev,
+        .ant-pagination-next {
+          .ant-pagination-item-link {
+            background-color: $light-secondary;
+            border-color: $light-border;
+            color: $light-text;
+
+            &:hover {
+              border-color: $light-accent;
+              color: $light-accent;
+            }
+          }
+        }
+
+        .ant-pagination-disabled {
+          .ant-pagination-item-link {
+            color: $light-disabled !important;
+            border-color: $light-border !important;
           }
         }
       }
 
-      .ant-pagination-disabled {
-        .ant-pagination-item-link {
-          color: $dark-disabled !important;
-          border-color: $dark-border !important;
+
+      .ant-table-filter-trigger {
+        color: $light-text;
+
+        &:hover {
+          color: $light-accent;
         }
       }
-    }
 
-    .ant-table-filter-trigger {
-      color: $dark-text;
+      .ant-table-selection {
+        .ant-checkbox-wrapper {
+          color: $light-text;
 
-      &:hover {
-        color: $dark-accent;
-      }
-    }
-
-    .ant-table-selection {
-      .ant-checkbox-wrapper {
-        color: $dark-text;
-
-        .ant-checkbox {
-          .ant-checkbox-inner {
-            background-color: $dark-secondary;
-            border-color: $dark-border;
-          }
-
-          &.ant-checkbox-checked {
+          .ant-checkbox {
             .ant-checkbox-inner {
-              background-color: $dark-accent;
-              border-color: $dark-accent;
+              background-color: $light-secondary;
+              border-color: $light-border;
+            }
+
+            &.ant-checkbox-checked {
+              .ant-checkbox-inner {
+                background-color: $light-accent;
+                border-color: $light-accent;
+              }
             }
           }
         }
       }
-    }
   }
 }

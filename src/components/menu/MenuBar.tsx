@@ -21,9 +21,9 @@ const MenuBar: React.FC = () => {
 
   return (
     <Menu
-      mode="horizontal"
+      mode="vertical"
       theme="dark"
-      className="rounded-xl !bg-black/30 select-non w-xl select-none"
+      className="rounded-xl !bg-black/30 select-non w-[200px] select-none"
       onSelect={onSelectHandler}
       items={menuItems}
       selectedKeys={[location.pathname]}

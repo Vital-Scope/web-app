@@ -16,8 +16,7 @@ export type FormData = z.infer<typeof formSchema>;
 const ModalForm: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const {
-    register,
-    getValues,
+  register,
     handleSubmit,
     reset,
     formState: { errors },
@@ -70,7 +69,7 @@ const ModalForm: React.FC<Props> = ({ isOpen, onClose }) => {
       >
         <div className="mb-8 flex flex-col items-center">
           <div
-            className="flex h-28 w-28 cursor-pointer items-center justify-center rounded-full border-2 border-blue-400 bg-gray-200 transition hover:opacity-80"
+            className="flex h-28 w-28 cursor-pointer items-center justify-center rounded-full border-2 border-[#E3E8F0] bg-[#F6F8FB] transition hover:opacity-80"
             onClick={handleAvatarClick}
             title="Загрузить аватар"
             style={{ overflow: "hidden" }}
@@ -92,7 +91,7 @@ const ModalForm: React.FC<Props> = ({ isOpen, onClose }) => {
               className="hidden"
             />
           </div>
-          <span className="mt-2 text-sm text-gray-500">
+          <span className="mt-2 text-sm text-[#B8C1EC]">
             Нажмите, чтобы загрузить аватар
           </span>
         </div>
@@ -101,25 +100,24 @@ const ModalForm: React.FC<Props> = ({ isOpen, onClose }) => {
             <div>
               <label
                 htmlFor="firstname"
-                className="mb-1 block font-semibold text-gray-700"
+                className="mb-1 block font-semibold text-[#2F70AF]"
               >
-                Имя <span className="text-red-500">*</span>
+                Имя <span className="text-[#E94560]">*</span>
               </label>
               <input
                 id="firstname"
                 type="text"
                 {...register("firstName")}
-                className="w-full rounded border border-blue-400 bg-gray-50 px-3 py-2 text-gray-800 shadow-inner focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full rounded border border-[#E3E8F0] bg-white px-3 py-2 text-[#232946] shadow focus:ring-2 focus:ring-[#3A86FF33] focus:outline-none placeholder-[#B8C1EC]"
                 style={{
                   minHeight: "40px",
                   fontSize: "1rem",
                   lineHeight: "1.5",
                   padding: "12px",
-                  borderColor: "#60a5fa",
                 }}
               />
               {errors.firstName && (
-                <span className="text-sm text-red-500">
+                <span className="text-sm text-[#E94560]">
                   {errors.firstName.message as string}
                 </span>
               )}
@@ -127,25 +125,24 @@ const ModalForm: React.FC<Props> = ({ isOpen, onClose }) => {
             <div>
               <label
                 htmlFor="lastname"
-                className="mb-1 block font-semibold text-gray-700"
+                className="mb-1 block font-semibold text-[#2F70AF]"
               >
-                Фамилия <span className="text-red-500">*</span>
+                Фамилия <span className="text-[#E94560]">*</span>
               </label>
               <input
                 id="lastname"
                 type="text"
                 {...register("lastName")}
-                className="w-full rounded border border-blue-400 bg-gray-50 px-3 py-2 text-gray-800 shadow-inner focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full rounded border border-[#E3E8F0] bg-white px-3 py-2 text-[#232946] shadow focus:ring-2 focus:ring-[#3A86FF33] focus:outline-none placeholder-[#B8C1EC]"
                 style={{
                   minHeight: "40px",
                   fontSize: "1rem",
                   lineHeight: "1.5",
                   padding: "12px",
-                  borderColor: "#60a5fa",
                 }}
               />
               {errors.lastName && (
-                <span className="text-sm text-red-500">
+                <span className="text-sm text-[#E94560]">
                   {errors.lastName.message as string}
                 </span>
               )}
@@ -153,7 +150,7 @@ const ModalForm: React.FC<Props> = ({ isOpen, onClose }) => {
             <div>
               <label
                 htmlFor="age"
-                className="mb-1 block font-semibold text-gray-700"
+                className="mb-1 block font-semibold text-[#2F70AF]"
               >
                 Возраст
               </label>
@@ -162,17 +159,16 @@ const ModalForm: React.FC<Props> = ({ isOpen, onClose }) => {
                 type="number"
                 min="0"
                 {...register("age", { valueAsNumber: true })}
-                className="w-full rounded border border-blue-400 bg-gray-50 px-3 py-2 text-gray-800 shadow-inner focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full rounded border border-[#E3E8F0] bg-white px-3 py-2 text-[#232946] shadow focus:ring-2 focus:ring-[#3A86FF33] focus:outline-none placeholder-[#B8C1EC]"
                 style={{
                   minHeight: "40px",
                   fontSize: "1rem",
                   lineHeight: "1.5",
                   padding: "12px",
-                  borderColor: "#60a5fa",
                 }}
               />
               {errors.age && (
-                <span className="text-sm text-red-500">
+                <span className="text-sm text-[#E94560]">
                   {errors.age.message as string}
                 </span>
               )}
@@ -181,25 +177,24 @@ const ModalForm: React.FC<Props> = ({ isOpen, onClose }) => {
           <div>
             <label
               htmlFor="information"
-              className="mb-1 block font-semibold text-gray-700"
+              className="mb-1 block font-semibold text-[#2F70AF]"
             >
               Информация
             </label>
             <textarea
               id="information"
               {...register("information")}
-              className="w-full resize-none rounded border border-blue-400 bg-gray-50 px-3 py-2 text-gray-800 shadow-inner focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full resize-none rounded border border-[#E3E8F0] bg-white px-3 py-2 text-[#232946] shadow focus:ring-2 focus:ring-[#3A86FF33] focus:outline-none placeholder-[#B8C1EC]"
               rows={10}
               style={{
                 minHeight: "300px",
                 fontSize: "1rem",
                 lineHeight: "1.5",
                 padding: "12px",
-                borderColor: "#60a5fa",
               }}
             />
             {errors.information && (
-              <span className="text-sm text-red-500">
+              <span className="text-sm text-[#E94560]">
                 {errors.information.message}
               </span>
             )}
