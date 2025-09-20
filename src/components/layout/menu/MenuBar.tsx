@@ -38,16 +38,26 @@ const MenuBar: React.FC = () => {
     navigate(info.key);
   }, [navigate]);
 
+  // Подсвечивать вкладку "Пациенты" для всех роутов, начинающихся с /patients
+  const getSelectedKey = () => {
+    if (location.pathname.startsWith("/patients")) return "/patients";
+    if (location.pathname.startsWith("/dashboard")) return "/dashboard";
+    if (location.pathname.startsWith("/monitoring")) return "/monitoring";
+    if (location.pathname.startsWith("/settings")) return "/settings";
+    if (location.pathname.startsWith("/about")) return "/about";
+    return location.pathname;
+  };
+
   return (
-  <aside className="w-[220px] min-w-[200px] bg-[#F9FAFB] pt-6 flex flex-col items-start z-10 border-r border-[#E5E7EB]">
+    <aside className="w-[220px] min-w-[220px] bg-[#F9FAFB] pt-6 flex flex-col items-start z-10 border-r border-[#E5E7EB]">
       <nav className="w-full">
         <Menu
           mode="vertical"
           theme="light"
-          className="rounded-xl bg-[#FFFFFF] select-none w-[200px] border border-[#E5E7EB]"
+          className="rounded-xl bg-[#FFFFFF] select-none w-full border border-[#E5E7EB]"
           onSelect={onSelectHandler}
           items={menuItems}
-          selectedKeys={[location.pathname]}
+          selectedKeys={[getSelectedKey()]}
         />
       </nav>
     </aside>

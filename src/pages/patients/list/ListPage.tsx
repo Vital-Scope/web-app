@@ -1,8 +1,8 @@
-import { SearchInput, SortSelect } from "../../components/ui";
+import { Button } from "../../../components/button";
+import { SearchInput, SortSelect } from "../../../components/ui";
 import DashboardItem from "./ui/Item";
 import { useState } from "react";
-import ModalForm from "./ui/ModalForm";
-import { Button } from "../../components/button";
+import { useNavigate } from "react-router-dom";
 
 const sortOptions = [
   { value: "lastName", label: "По фамилии" },
@@ -10,13 +10,14 @@ const sortOptions = [
   { value: "createdAt", label: "По дате добавления" },
 ];
 
-const PatientsPage = () => {
+const PatientsListPage = () => {
   const [sortBy, setSortBy] = useState("lastName");
   const [search, setSearch] = useState("");
-  const [isModalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const handleCreateClick = () => {
+    navigate("/patients/create");
+  };
 
   return (
     <div className="relative">
@@ -33,10 +34,9 @@ const PatientsPage = () => {
           <DashboardItem key={idx} />
         ))}
       </div>
-      <ModalForm isOpen={isModalOpen} onClose={closeModal} />
-      <Button onClick={openModal} />
+      <Button onClick={handleCreateClick} />
     </div>
   );
 };
 
-export default PatientsPage;
+export default PatientsListPage;

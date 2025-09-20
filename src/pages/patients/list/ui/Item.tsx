@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import styles from "../styles.module.scss";
-import { WomanMock } from "../../../components/icons";
-import InfoLabel from "../../../components/ui/InfoLabel";
+import { WomanMock } from "../../../../components/icons";
+import InfoLabel from "../../../../components/ui/InfoLabel";
 
 const mock = {
   lastName: "Иванова",

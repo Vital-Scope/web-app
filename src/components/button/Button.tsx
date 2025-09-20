@@ -2,11 +2,10 @@ interface Props {
   onClick: () => void;
 }
 
-
 const Button: React.FC<Props> = ({ onClick }) => (
   <button
     onClick={onClick}
-    className="text-md fixed right-10 bottom-5 flex h-10 w-36 items-center justify-center rounded-xl border-2 border-[#3B82F6] bg-transparent font-semibold text-[#3B82F6] shadow-none transition-all duration-200 hover:bg-[#3B82F6] hover:text-white hover:shadow-[0_0_16px_4px_#3B82F633] hover:scale-105 focus:outline-none"
+    className="text-md fixed right-8 bottom-5 flex h-10 w-36 items-center justify-center rounded-xl border-2 border-[#3B82F6] bg-transparent font-semibold text-[#3B82F6] shadow-none transition-all duration-200 hover:scale-105 hover:bg-[#3B82F6] hover:text-white hover:shadow-[0_0_16px_4px_#3B82F633] focus:outline-none"
     style={{ letterSpacing: "0.05em" }}
   >
     <svg
