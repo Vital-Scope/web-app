@@ -10,6 +10,12 @@ const formSchema = z.object({
     .max(70, "Максимальный возраст 70")
     .optional()
     .nullable(),
+  pregnancyWeek: z
+    .number()
+    .min(1, "Минимум 1 неделя")
+    .max(42, "Максимум 42 недели")
+    .optional()
+    .nullable(),
 });
 
 export default formSchema;

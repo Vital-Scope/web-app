@@ -19,23 +19,18 @@ const PatientsPage = () => {
   const closeModal = () => setModalOpen(false);
 
   return (
-    <div className="relative w-full max-w-6xl mx-auto py-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 w-full">
+    <div className="relative">
+      <div className="mb-8 flex w-full flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <SearchInput
           value={search}
           onChange={setSearch}
           placeholder="Поиск по фамилии..."
         />
-        <SortSelect
-          value={sortBy}
-          onChange={setSortBy}
-          options={sortOptions}
-        />
+        <SortSelect value={sortBy} onChange={setSortBy} options={sortOptions} />
       </div>
-      <div className="mt-2 mb-4 border-b-2 border-rose-200/50" />
       <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
         {new Array(20).fill(0).map((_, idx) => (
-          <DashboardItem key={idx}/>
+          <DashboardItem key={idx} />
         ))}
       </div>
       <ModalForm isOpen={isModalOpen} onClose={closeModal} />

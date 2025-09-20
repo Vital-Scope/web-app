@@ -1,18 +1,13 @@
-
-
-import { Outlet } from "react-router-dom";
 import { Header } from "./header";
 import { MenuBar } from "./menu";
-
+import { MainContent } from "./mainContent";
 
 const Layout = () => (
-  <div className="fixed inset-0 w-screen h-screen bg-[#F9FAFB] flex flex-col">
+  <div className="fixed inset-0 flex h-screen w-screen flex-col bg-[#F9FAFB]">
     <Header />
-    <div className="flex flex-1 flex-row h-[calc(100vh-60px)] z-0">
+    <div className="z-0 flex h-[calc(100vh-60px)] flex-1 flex-row">
       <MenuBar />
-  <main className="flex-1 p-8 md:p-10 overflow-y-auto text-[#1F2937] font-sans z-0">
-        <Outlet />
-      </main>
+      <MainContent />
     </div>
   </div>
 );
