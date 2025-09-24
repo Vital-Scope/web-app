@@ -6,8 +6,8 @@ const formSchema = z.object({
   middleName: z.string().nullable(),
   birthDate: z.number("Дата рождения обязательна"), // timestamp
   clientId: z.string().nullable(), // id интеграции
-  pregnancyWeek: z.number().min(0).max(45).nullable(), // неделя беременности
-  pregnancyNumber: z.number().min(1).nullable(), // какая по счету беременность
+  pregnancyWeek: z.string().min(0).max(45).nullable(), // неделя беременности
+  pregnancyNumber: z.string().min(1).nullable(), // какая по счету беременность
   dueDate: z.number().optional().nullable(), // timestamp
   anamnesis: z.string(),
   doctorNotes: z.string(),

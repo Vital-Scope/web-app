@@ -5,12 +5,14 @@ import formSchema from "./formSchema";
 import ProfileBlock from "./ui/ProfileBlock";
 import ObstetricBlock from "./ui/ObstetricBlock";
 import NotesBlock from "./ui/NotesBlock";
-
+import * as uuid from "uuid"
 
 import { z } from "zod";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import dayjs from "dayjs";
 type FormValues = z.infer<typeof formSchema>;
 const AVATAR_PLACEHOLDER = null;
-
 
 const PatientsFormPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -18,6 +20,7 @@ const PatientsFormPage = () => {
     control,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -36,12 +39,33 @@ const PatientsFormPage = () => {
     },
   });
 
+  const createPatient = async () => {
+    const url = import.meta.env.VITE_API_URL + `/api/patient/create`;
+    const values = getValues();
+    const payload = {
+      ...values,
+      pregnancyWeek: Number(getValues().pregnancyWeek),
+      pregnancyNumber: Number(getValues().pregnancyNumber),
+      birthDate: dayjs(values.birthDate).format("YYYY-MM-DD"),
+      clientId: uuid.v4(),
+    };
+
+    try {
+      const res = await axios.post(url, payload);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleAvatarClick = () => fileInputRef.current?.click();
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const reader = new FileReader();
       reader.onload = (ev) => {
-        setValue("avatar", ev.target?.result as string, { shouldValidate: true });
+        setValue("avatar", ev.target?.result as string, {
+          shouldValidate: true,
+        });
       };
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -51,15 +75,19 @@ const PatientsFormPage = () => {
     const payload = {
       ...data,
       birthDate:
-        data.birthDate && typeof data.birthDate === "object" && "valueOf" in data.birthDate
+        data.birthDate &&
+        typeof data.birthDate === "object" &&
+        "valueOf" in data.birthDate
           ? (data.birthDate as { valueOf: () => number }).valueOf()
           : data.birthDate,
       dueDate:
-        data.dueDate && typeof data.dueDate === "object" && "valueOf" in data.dueDate
+        data.dueDate &&
+        typeof data.dueDate === "object" &&
+        "valueOf" in data.dueDate
           ? (data.dueDate as { valueOf: () => number }).valueOf()
           : data.dueDate,
     };
-    console.log(payload);
+    createPatient();
   };
 
   return (
@@ -71,7 +99,7 @@ const PatientsFormPage = () => {
       <h2 className="mb-2 text-3xl font-extrabold text-[#3B82F6]">
         Создание карточки пациента
       </h2>
-      <div className="grid w-full max-w-8xl grid-cols-1 gap-8 md:grid-cols-2">
+      <div className="max-w-8xl grid w-full grid-cols-1 gap-8 md:grid-cols-2">
         <div className="flex flex-col gap-8">
           <ProfileBlock
             control={control}
