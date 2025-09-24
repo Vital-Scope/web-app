@@ -1,0 +1,159 @@
+
+// Светлая палитра
+$light-bg: #FFFFFF !default;
+$light-text: #232946 !default;
+$light-border: #E3E8F0 !default;
+$light-accent: #3A86FF !default;
+$light-secondary: #F6F8FB !default;
+$light-hover: #F0F4FF !default;
+$light-muted: #B8C1EC !default;
+$light-disabled: #BFC9D9 !default;
+
+.animation {
+  &:hover {
+    transform: scale(1.03);
+    animation: scale-animation 0.5s ease-in-out;
+  }
+
+  @keyframes scale-animation {
+    0% {
+      transform: scale(1) rotate(0);
+    }
+    100% {
+      transform: scale(1.03);
+    }
+  }
+}
+
+.table {
+  :global {
+    .ant-table {
+
+  background-color: $light-bg;
+  color: $light-text;
+  border: 1px solid $light-border;
+
+
+      .ant-table-thead > tr > th {
+        background-color: $light-secondary;
+        color: $light-text;
+        border-bottom: 1px solid $light-border;
+        font-weight: 700;
+
+        &:hover {
+          background-color: $light-hover;
+        }
+      }
+
+
+      .ant-table-tbody > tr {
+        background-color: $light-bg;
+        color: $light-text;
+
+        &:hover > td {
+          background-color: $light-hover !important;
+          color: $light-text;
+        }
+
+        > td {
+          border-bottom: 1px solid $light-border;
+          background-color: $light-bg;
+          color: $light-text;
+        }
+
+        &.ant-table-row-selected > td {
+          background-color: $light-secondary;
+        }
+      }
+
+
+      .ant-table-placeholder {
+        background-color: $light-bg;
+        color: $light-muted;
+
+        &:hover > td {
+          background-color: $light-bg;
+        }
+      }
+    }
+
+
+      .ant-table-pagination {
+        .ant-pagination-item {
+          background-color: $light-secondary;
+          border-color: $light-border;
+
+          a {
+            color: $light-text;
+          }
+
+          &:hover {
+            border-color: $light-accent;
+
+            a {
+              color: $light-accent;
+            }
+          }
+
+          &.ant-pagination-item-active {
+            background-color: $light-accent;
+            border-color: $light-accent;
+
+            a {
+              color: $light-bg;
+            }
+          }
+        }
+
+        .ant-pagination-prev,
+        .ant-pagination-next {
+          .ant-pagination-item-link {
+            background-color: $light-secondary;
+            border-color: $light-border;
+            color: $light-text;
+
+            &:hover {
+              border-color: $light-accent;
+              color: $light-accent;
+            }
+          }
+        }
+
+        .ant-pagination-disabled {
+          .ant-pagination-item-link {
+            color: $light-disabled !important;
+            border-color: $light-border !important;
+          }
+        }
+      }
+
+
+      .ant-table-filter-trigger {
+        color: $light-text;
+
+        &:hover {
+          color: $light-accent;
+        }
+      }
+
+      .ant-table-selection {
+        .ant-checkbox-wrapper {
+          color: $light-text;
+
+          .ant-checkbox {
+            .ant-checkbox-inner {
+              background-color: $light-secondary;
+              border-color: $light-border;
+            }
+
+            &.ant-checkbox-checked {
+              .ant-checkbox-inner {
+                background-color: $light-accent;
+                border-color: $light-accent;
+              }
+            }
+          }
+        }
+      }
+  }
+}

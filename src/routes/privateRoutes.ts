@@ -2,7 +2,7 @@ import { AboutPage } from "../pages/about";
 import { DashboardPage } from "../pages/dashboard";
 import { Monitoring } from "../pages/monitoring";
 import { MonitoringList } from "../pages/monitoringList";
-import { PatientsPage } from "../pages/patients";
+import { PatientsList, PatientsForm } from "../pages/patients";
 import { SettingsPage } from "../pages/settings";
 
 const privateRoutes = [
@@ -15,9 +15,21 @@ const privateRoutes = [
   },
   {
     path: "/patients",
-    Component: PatientsPage,
+    Component: PatientsList,
     label: "Пациенты",
     isMenu: true,
+  },
+  {
+    path: "/patients/:id",
+    Component: PatientsForm,
+    label: "Пациенты",
+    isMenu: false,
+  },
+  {
+    path: "/patients/create",
+    Component: PatientsForm,
+    label: "Создать пациента",
+    isMenu: false,
   },
   {
     path: "/monitoring",

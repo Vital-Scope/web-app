@@ -12,13 +12,13 @@ interface MonitoringCardProps {
 const statusMap = {
   ready: {
     label: "Готово",
-    color: "bg-[#3A86FF] text-white",
-    glow: "shadow-[0_0_12px_2px_#3A86FF80]",
+    color: "bg-[#E6F4FF] text-[#2F70AF] border border-[#3A86FF]",
+    glow: "shadow-[0_0_8px_1px_#3A86FF33]",
   },
   not_ready: {
     label: "Не готово",
-    color: "bg-[#E94560] text-white",
-    glow: "shadow-[0_0_12px_2px_#E9456080]",
+    color: "bg-[#FFF0F3] text-[#E94560] border border-[#E94560]",
+    glow: "shadow-[0_0_8px_1px_#E9456033]",
   },
 };
 
@@ -27,13 +27,13 @@ const MonitoringCard: React.FC<MonitoringCardProps> = ({ firstName, lastName, da
   const [favorite, setFavorite] = React.useState(false);
   return (
     <div
-      className="w-full max-w-md mx-auto bg-[#232946cc] rounded-2xl p-6 mb-6 flex flex-col gap-2 shadow-lg border border-[#B8C1EC33] backdrop-blur-md hover:shadow-[0_0_32px_0_#3A86FF80] transition-shadow"
+      className="w-full max-w-md mx-auto bg-white rounded-2xl p-6 mb-6 flex flex-col gap-2 shadow-[0_4px_24px_0_#E3E8F0] border border-[#E3E8F0] hover:shadow-[0_0_24px_0_#B8C1EC33] transition-shadow"
       style={{
-        boxShadow: '0 8px 32px 0 #18122bcc',
+        boxShadow: '0 4px 24px 0 #E3E8F0',
       }}
     >
       <div>
-        <div className="text-lg md:text-xl font-bold text-white drop-shadow-[0_0_8px_#3A86FF80]">
+        <div className="text-lg md:text-xl font-bold text-[#2F70AF]">
           {lastName} {firstName}
         </div>
         <div className="text-sm text-[#B8C1EC] mt-1">
@@ -59,11 +59,11 @@ const MonitoringCard: React.FC<MonitoringCardProps> = ({ firstName, lastName, da
           arrow={false}
           styles={{
             body: {
-              background: '#232946',
-              color: '#fff',
+              background: '#FFFFFF',
+              color: '#232946',
               borderRadius: '0.75rem',
-              boxShadow: '0 4px 24px 0 #18122bcc',
-              border: '1.5px solid #B8C1EC33',
+              boxShadow: '0 4px 24px 0 #E3E8F0',
+              border: '1.5px solid #E3E8F0',
               padding: '6px 18px',
               fontWeight: 600,
               fontSize: '0.95rem',
@@ -71,13 +71,13 @@ const MonitoringCard: React.FC<MonitoringCardProps> = ({ firstName, lastName, da
             },
           }}
           content={
-            <span style={{ color: favorite ? '#E94560' : '#B8C1EC' }}>
+            <span style={{ color: favorite ? '#E94560' : '#3A86FF' }}>
               {favorite ? 'Убрать из отслеживаемых' : 'Отслеживать'}
             </span>
           }
         >
           <button
-            className="absolute right-0 p-1 rounded-full bg-transparent hover:bg-[#3A86FF22] transition-colors"
+            className="absolute right-0 p-1 rounded-full bg-transparent hover:bg-[#F0F4FF] transition-colors border border-[#E3E8F0]"
             aria-label={favorite ? 'Убрать из отслеживаемых' : 'Отслеживать'}
             onClick={e => {
               e.stopPropagation();
@@ -85,11 +85,11 @@ const MonitoringCard: React.FC<MonitoringCardProps> = ({ firstName, lastName, da
             }}
           >
             {favorite ? (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#E94560" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#E94560" className="w-7 h-7 drop-shadow-[0_0_8px_#E9456080]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="#E94560" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#E94560" className="w-7 h-7">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#B8C1EC" className="w-7 h-7">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#3A86FF" className="w-7 h-7">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12.1 21.3l-1.1-1.01C5.14 15.14 2 12.23 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.73-3.14 6.64-8.9 11.79z" />
               </svg>
             )}

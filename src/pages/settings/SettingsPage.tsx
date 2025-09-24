@@ -26,21 +26,17 @@ const SettingsPage = () => {
       className="flex justify-center items-center min-h-[80vh]"
     >
       <div
-        className="w-full max-w-sm rounded-2xl p-6 font-sans text-white border"
+        className="w-full max-w-sm rounded-2xl p-6 font-sans text-[#232946] border bg-white shadow-[0_4px_24px_0_#E3E8F0]"
         style={{
-          background: 'linear-gradient(120deg, #232946cc 80%, #18122bcc 100%)',
-          border: '1.5px solid #B8C1EC33',
-          boxShadow: '0 8px 32px 0 #18122bcc',
-          backdropFilter: 'blur(18px)',
-          WebkitBackdropFilter: 'blur(18px)',
+          border: '1.5px solid #E3E8F0',
         }}
       >
-        <h2 className="text-xl font-bold mb-7 text-center text-white/90 tracking-wide">
+        <h2 className="text-xl font-bold mb-7 text-center text-[#3A86FF] tracking-wide">
           Настройки графика
         </h2>
         <div className="space-y-7">
           <div className="flex items-center justify-between gap-4">
-            <span className="text-base font-medium text-white/80">
+            <span className="text-base font-medium text-[#232946]">
               Цвет ЧСС плода
             </span>
             <Controller
@@ -75,7 +71,7 @@ const SettingsPage = () => {
             />
           </div>
           <div className="flex items-center justify-between gap-4">
-            <span className="text-base font-medium text-white/80">
+            <span className="text-base font-medium text-[#232946]">
               Цвет тонуса матки
             </span>
             <Controller
@@ -113,9 +109,9 @@ const SettingsPage = () => {
         <Button
           htmlType="submit"
           type="primary"
-          className="w-full mt-8 py-2 rounded-xl bg-gradient-to-r from-[#3A86FF] via-[#B8C1EC] to-[#E94560] text-white font-semibold text-lg border-0 shadow-lg hover:from-[#232946] hover:to-[#3A86FF] transition-all"
+          className="w-full mt-8 py-2 rounded-xl bg-gradient-to-r from-[#3A86FF] via-[#B8C1EC] to-[#E94560] text-white font-semibold text-lg border-0 shadow-lg hover:from-[#B8C1EC] hover:to-[#3A86FF] transition-all"
           style={{
-            backdropFilter: "blur(6px)",
+            letterSpacing: '0.05em',
           }}
         >
           Сохранить
