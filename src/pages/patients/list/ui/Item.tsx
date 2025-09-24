@@ -3,15 +3,23 @@ import styles from "../styles.module.scss";
 import { WomanMock } from "../../../../components/icons";
 import InfoLabel from "../../../../components/ui/InfoLabel";
 
-const mock = {
-  lastName: "Иванова",
-  firstName: "Мария",
-  age: 32,
-  pregnancyWeek: 24,
-  information: "Пациентка наблюдается с 2023 года. Жалоб нет.",
-};
+export interface DashboardItemPatient {
+  lastName: string;
+  firstName: string;
+  age: number;
+  pregnancyWeek: number;
+  anamnesis: string;
+}
 
-const DashboardItem = () => {
+type DashboardItemProps = DashboardItemPatient;
+
+const DashboardItem: React.FC<DashboardItemProps> = ({
+  lastName,
+  firstName,
+  age,
+  pregnancyWeek,
+  anamnesis,
+}) => {
   return (
     <div
       className={clsx(
@@ -25,19 +33,17 @@ const DashboardItem = () => {
         </div>
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-[#3B82F6]">
-              {mock.lastName}
-            </span>
-            <span>{mock.firstName}</span>
+            <span className="font-semibold text-[#3B82F6]">{lastName}</span>
+            <span>{firstName}</span>
           </div>
-          <div className="mt-1 flex gap-2">
-            <InfoLabel color="blue">{mock.age}&nbsp;лет</InfoLabel>
-            <InfoLabel color="green">{mock.pregnancyWeek}&nbsp;неделя</InfoLabel>
+          <div className="mt-1 flex items-start gap-1 2xl:flex-row 2xl:items-center 2xl:gap-2">
+            <InfoLabel color="blue">{age}&nbsp;лет</InfoLabel>
+            <InfoLabel color="green">{pregnancyWeek}&nbsp;неделя</InfoLabel>
           </div>
         </div>
       </div>
       <div className="mt-2 min-h-[40px] text-sm text-[#6B7280]">
-        {mock.information}
+        {anamnesis}
       </div>
     </div>
   );

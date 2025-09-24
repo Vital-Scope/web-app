@@ -1,8 +1,11 @@
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "../../../components/button";
 import { SearchInput, SortSelect } from "../../../components/ui";
 import DashboardItem from "./ui/Item";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { getPatients } from "./service";
 
 const sortOptions = [
   { value: "lastName", label: "По фамилии" },
@@ -11,6 +14,10 @@ const sortOptions = [
 ];
 
 const PatientsListPage = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["patients"],
+    queryFn: getPatients,
+  });
   const [sortBy, setSortBy] = useState("lastName");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
@@ -18,7 +25,7 @@ const PatientsListPage = () => {
   const handleCreateClick = () => {
     navigate("/patients/create");
   };
-
+  console.log(data);
   return (
     <div className="relative">
       <div className="mb-8 flex w-full flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -29,9 +36,19 @@ const PatientsListPage = () => {
         />
         <SortSelect value={sortBy} onChange={setSortBy} options={sortOptions} />
       </div>
-      <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-4">
-        {new Array(20).fill(0).map((_, idx) => (
-          <DashboardItem key={idx} />
+      <div className="grid gap-6 md:grid-cols-3 2xl:grid-cols-4">
+        {data?.map((patient) => (
+          <DashboardItem
+            key={patient.id}
+            firstName={patient.firstName}
+            lastName={patient.lastName}
+            age={
+              new Date().getFullYear() -
+              new Date(patient.birthDate).getFullYear()
+            }
+            pregnancyWeek={patient.pregnancyWeek || 0}
+            anamnesis={patient.anamnesis}
+          />
         ))}
       </div>
       <Button onClick={handleCreateClick} />
