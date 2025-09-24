@@ -5,23 +5,31 @@ import formSchema from "./formSchema";
 import ProfileBlock from "./ui/ProfileBlock";
 import ObstetricBlock from "./ui/ObstetricBlock";
 import NotesBlock from "./ui/NotesBlock";
-import * as uuid from "uuid"
+import * as uuid from "uuid";
 import { z } from "zod";
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import dayjs from "dayjs";
+import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { notification } from "antd";
+import { useEffect } from "react";
+import { getPatientById, updatePatient, createPatient } from "./service";
 
 type FormValues = z.infer<typeof formSchema>;
 const AVATAR_PLACEHOLDER = null;
 
 const PatientsFormPage = () => {
+  const { id } = useParams();
+  console.log(id);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors },
+    reset,
+    formState: { errors, isDirty },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,20 +47,85 @@ const PatientsFormPage = () => {
     },
   });
 
-  const createPatient = async () => {
-    const url = import.meta.env.VITE_API_URL + `/api/patient/create`;
+  async function getPatientInfo(patientId: string) {
+    const patient = await getPatientById(patientId);
+    if (patient) {
+      reset({
+        lastName: patient.lastName || "",
+        firstName: patient.firstName || "",
+        middleName: patient.middleName || "",
+        birthDate: patient.birthDate
+          ? Date.parse(patient.birthDate)
+          : undefined,
+        clientId: patient.clientId || "",
+        pregnancyWeek:
+          patient.pregnancyWeek != null
+            ? String(patient.pregnancyWeek)
+            : undefined,
+        pregnancyNumber:
+          patient.pregnancyNumber != null
+            ? String(patient.pregnancyNumber)
+            : undefined,
+        dueDate: patient.dueDate ? Date.parse(patient.dueDate) : undefined,
+        anamnesis: patient.anamnesis || "",
+        doctorNotes: patient.doctorNotes || "",
+        avatar: patient.avatar || AVATAR_PLACEHOLDER,
+      });
+    }
+  }
+
+  useEffect(() => {
+    if (!id) return;
+    getPatientInfo(id);
+  }, [id, reset]);
+
+  const handleCreate = async () => {
     const values = getValues();
     const payload = {
       ...values,
-      pregnancyWeek: Number(getValues().pregnancyWeek),
-      pregnancyNumber: Number(getValues().pregnancyNumber),
+      pregnancyWeek: Number(values.pregnancyWeek),
+      pregnancyNumber: Number(values.pregnancyNumber),
       birthDate: dayjs(values.birthDate).format("YYYY-MM-DD"),
+      dueDate: values.dueDate
+        ? dayjs(values.dueDate).format("YYYY-MM-DD")
+        : null,
+      avatar: values.avatar,
       clientId: uuid.v4(),
     };
-
     try {
-      const res = await axios.post(url, payload);
-      console.log(res);
+      const created = await createPatient(payload);
+      if (created && created.id) {
+        navigate(`/patients/${created.id}`);
+      } else {
+        navigate("/patients");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleUpdate = async () => {
+    const values = getValues();
+    const payload = {
+      ...values,
+      pregnancyWeek: Number(values.pregnancyWeek),
+      pregnancyNumber: Number(values.pregnancyNumber),
+      birthDate: dayjs(values.birthDate).format("YYYY-MM-DD"),
+      dueDate: values.dueDate
+        ? dayjs(values.dueDate).format("YYYY-MM-DD")
+        : null,
+      avatar: values.avatar,
+      clientId: values.clientId,
+      id: id ? id : "",
+    };
+    try {
+      await updatePatient(payload);
+      notification.success({
+        message: "Пациент обновлён",
+        description: "Данные пациента успешно сохранены.",
+        placement: "topRight",
+        duration: 3,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -71,23 +144,12 @@ const PatientsFormPage = () => {
     }
   };
 
-  const onSubmit = (data: FormValues) => {
-    const payload = {
-      ...data,
-      birthDate:
-        data.birthDate &&
-        typeof data.birthDate === "object" &&
-        "valueOf" in data.birthDate
-          ? (data.birthDate as { valueOf: () => number }).valueOf()
-          : data.birthDate,
-      dueDate:
-        data.dueDate &&
-        typeof data.dueDate === "object" &&
-        "valueOf" in data.dueDate
-          ? (data.dueDate as { valueOf: () => number }).valueOf()
-          : data.dueDate,
-    };
-    createPatient();
+  const onSubmit = () => {
+    if (id) {
+      handleUpdate();
+    } else {
+      handleCreate();
+    }
   };
 
   return (
@@ -116,7 +178,9 @@ const PatientsFormPage = () => {
       </div>
       <button
         type="submit"
-        className="mt-4 w-full max-w-3xl rounded-xl bg-[#10B981] py-3 text-lg font-bold text-white shadow transition-colors hover:bg-[#059669]"
+        className={`mt-4 w-full max-w-md rounded-lg bg-[#10B981] py-2 text-base font-semibold text-white shadow transition-colors hover:bg-[#059669] disabled:cursor-not-allowed disabled:bg-[#F3F4F6] disabled:text-[#6B7280]`}
+        style={{ minWidth: 180 }}
+        disabled={!isDirty}
       >
         Сохранить
       </button>

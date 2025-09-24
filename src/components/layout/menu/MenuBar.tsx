@@ -1,17 +1,14 @@
-
 import { Menu } from "antd";
 import {
   DashboardOutlined,
   UsergroupAddOutlined,
   LineChartOutlined,
   SettingOutlined,
-  InfoCircleOutlined
+  InfoCircleOutlined,
 } from "@ant-design/icons";
 import "./menuBar.module.scss";
 import privateRoutes from "../../../routes/privateRoutes";
-import { useCallback } from "react";
 import { useNavigate, useLocation } from "react-router";
-
 
 const iconMap: Record<string, React.ReactNode> = {
   "/dashboard": <DashboardOutlined />,
@@ -30,15 +27,10 @@ const menuItems = privateRoutes
     icon: iconMap[route.path] || null,
   }));
 
-
 const MenuBar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const onSelectHandler = useCallback((info: any) => {
-    navigate(info.key);
-  }, [navigate]);
 
-  // Подсвечивать вкладку "Пациенты" для всех роутов, начинающихся с /patients
   const getSelectedKey = () => {
     if (location.pathname.startsWith("/patients")) return "/patients";
     if (location.pathname.startsWith("/dashboard")) return "/dashboard";
@@ -49,13 +41,13 @@ const MenuBar: React.FC = () => {
   };
 
   return (
-    <aside className="w-[220px] min-w-[220px] bg-[#F9FAFB] pt-6 flex flex-col items-start z-10 border-r border-[#E5E7EB]">
+    <aside className="z-10 flex w-[220px] min-w-[220px] flex-col items-start border-r border-[#E5E7EB] bg-[#F9FAFB] pt-6">
       <nav className="w-full">
         <Menu
           mode="vertical"
           theme="light"
-          className="rounded-xl bg-[#FFFFFF] select-none w-full border border-[#E5E7EB]"
-          onSelect={onSelectHandler}
+          className="w-full rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] select-none"
+          onClick={(info) => navigate(info.key)}
           items={menuItems}
           selectedKeys={[getSelectedKey()]}
         />

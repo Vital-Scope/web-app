@@ -3,8 +3,6 @@ import React from "react";
 const COLORS = ["#3B82F6", "#10B981", "#F472B6", "#8B5CF6"];
 
 export const WomanMock: React.FC = () => {
-  // Для SSR и стабильности можно добавить seed или проп, но сейчас просто Math.random
-  const bodyColor = COLORS[Math.floor(Math.random() * COLORS.length)];
   return (
     <svg
       width={60}
@@ -45,7 +43,7 @@ export const WomanMock: React.FC = () => {
         <path d="M42 58c4-10 14-16 22-16s18 6 22 16" fill="none" />
 
         {/* Плечи/одежда */}
-        <path d="M32 106c4-14 18-22 32-22s28 8 32 22v8H32v-8Z" fill={bodyColor} />
+        <path d="M32 106c4-14 18-22 32-22s28 8 32 22v8H32v-8Z" fill={COLORS[0]} />
       </g>
     </svg>
   );
