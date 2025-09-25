@@ -59,7 +59,7 @@ const MonitoringList = () => {
   const data = sortData(filtered, sortBy);
 
   return (
-    <div className="w-full max-w-6xl mx-auto py-8">
+    <div className="w-full max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 w-full">
         <SearchInput
           value={search}
