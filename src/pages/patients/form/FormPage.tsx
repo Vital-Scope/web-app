@@ -4,10 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import formSchema from "./formSchema";
 import ProfileBlock from "./ui/ProfileBlock";
 import ObstetricBlock from "./ui/ObstetricBlock";
-import NotesBlock from "./ui/NotesBlock";
 import * as uuid from "uuid";
 import { z } from "zod";
-import axios from "axios";
 import dayjs from "dayjs";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +38,6 @@ const PatientsFormPage = () => {
       clientId: "123456",
       pregnancyWeek: undefined,
       pregnancyNumber: undefined,
-      dueDate: undefined,
       anamnesis: "",
       doctorNotes: "",
       avatar: AVATAR_PLACEHOLDER,
@@ -66,7 +63,6 @@ const PatientsFormPage = () => {
           patient.pregnancyNumber != null
             ? String(patient.pregnancyNumber)
             : undefined,
-        dueDate: patient.dueDate ? Date.parse(patient.dueDate) : undefined,
         anamnesis: patient.anamnesis || "",
         doctorNotes: patient.doctorNotes || "",
         avatar: patient.avatar || AVATAR_PLACEHOLDER,
@@ -86,17 +82,16 @@ const PatientsFormPage = () => {
       pregnancyWeek: Number(values.pregnancyWeek),
       pregnancyNumber: Number(values.pregnancyNumber),
       birthDate: dayjs(values.birthDate).format("YYYY-MM-DD"),
-      dueDate: values.dueDate
-        ? dayjs(values.dueDate).format("YYYY-MM-DD")
-        : null,
       avatar: values.avatar,
       clientId: uuid.v4(),
     };
     try {
       const created = await createPatient(payload);
       if (created && created.id) {
+        reset(getValues());
         navigate(`/patients/${created.id}`);
       } else {
+        reset(getValues());
         navigate("/patients");
       }
     } catch (error) {
@@ -111,9 +106,6 @@ const PatientsFormPage = () => {
       pregnancyWeek: Number(values.pregnancyWeek),
       pregnancyNumber: Number(values.pregnancyNumber),
       birthDate: dayjs(values.birthDate).format("YYYY-MM-DD"),
-      dueDate: values.dueDate
-        ? dayjs(values.dueDate).format("YYYY-MM-DD")
-        : null,
       avatar: values.avatar,
       clientId: values.clientId,
       id: id ? id : "",
@@ -126,6 +118,7 @@ const PatientsFormPage = () => {
         placement: "topRight",
         duration: 3,
       });
+      reset(getValues());
     } catch (error) {
       console.error(error);
     }
@@ -159,7 +152,7 @@ const PatientsFormPage = () => {
       autoComplete="off"
     >
       <h2 className="mb-2 text-3xl font-extrabold text-[#3B82F6]">
-        Создание карточки пациента
+        Карточка пациента
       </h2>
       <div className="max-w-8xl grid w-full grid-cols-1 gap-8 md:grid-cols-2">
         <div className="flex flex-col gap-8">
@@ -173,7 +166,6 @@ const PatientsFormPage = () => {
         </div>
         <div className="flex flex-col gap-8">
           <ObstetricBlock control={control} errors={errors} />
-          <NotesBlock control={control} errors={errors} />
         </div>
       </div>
       <button

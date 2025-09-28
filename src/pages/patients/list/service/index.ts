@@ -10,7 +10,6 @@ export interface Patient {
   clientId: string | null;
   pregnancyWeek: number | null;
   pregnancyNumber: number | null;
-  dueDate: string | null;
   anamnesis: string;
   doctorNotes: string;
   avatar: string | null;

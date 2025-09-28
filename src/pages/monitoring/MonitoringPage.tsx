@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import Plot from "react-plotly.js";
 import type { MonitoringModel } from "../../models/Monitoring";
 import mapMonitoring from "../../models/Monitoring";
 
 const Monitoring = () => {
-  const { data: Data, isLoading } = useQuery({
+  const { data: Data } = useQuery({
     queryKey: ["getMonitoringData"],
     queryFn: async () => {
       try {
@@ -40,7 +40,7 @@ const Monitoring = () => {
   }, [Data]);
 
   const [layout, setLayout] = useState<any>({
-    title: { text: "Мониторинг", font: { color: "white" } },
+      title: { text: "Мониторинг", font: { color: "white" } },
     paper_bgcolor: "rgba(255, 255, 255, 0.3)",
     plot_bgcolor: "transparent",
     xaxis: {

@@ -13,7 +13,7 @@ const sortOptions = [
 ];
 
 const PatientsListPage = () => {
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["patients"],
     queryFn: getPatients,
   });
