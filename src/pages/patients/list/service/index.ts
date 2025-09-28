@@ -1,18 +1,20 @@
 import { notification } from "antd";
 import axios from "axios";
+import type { Monitoring } from "../../../monitoring/api/types";
 
 export interface Patient {
   id: string;
   lastName: string;
   firstName: string;
   middleName: string | null;
-  birthDate: string; // timestamp
+  birthDate: string;
   clientId: string | null;
   pregnancyWeek: number | null;
   pregnancyNumber: number | null;
   anamnesis: string;
   doctorNotes: string;
   avatar: string | null;
+  monitorings:  Monitoring[];
 }
 
 export async function getPatients() {

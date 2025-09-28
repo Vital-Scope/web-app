@@ -18,7 +18,7 @@ const AVATAR_PLACEHOLDER = null;
 
 const PatientsFormPage = () => {
   const { id } = useParams();
-  console.log(id);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const {

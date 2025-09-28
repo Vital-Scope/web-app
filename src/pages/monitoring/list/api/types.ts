@@ -1,6 +1,13 @@
 type MonitoringResult = "Regular" | "Risk" | "Hypoxia";
 type MonitoringStatus = "Active" | "Completed";
 
+interface Sensor {
+  id: string;
+  time: number;
+  channel: number; // 0 - чсс, 1 - тонус матки
+  value: number;
+}
+
 export interface Monitoring {
   id: string;
   dateStart: number | null;
@@ -18,7 +25,7 @@ export interface Monitoring {
   diagnosis: string;
   patientId: string;
   notes: string | null;
-  sensors: any[];
+  sensors: Sensor[];
   createdAt: number | null;
   updatedAt: number | null;
 }

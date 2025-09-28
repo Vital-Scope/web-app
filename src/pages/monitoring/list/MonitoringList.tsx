@@ -2,8 +2,9 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getMonitorings } from "./api";
 import MonitoringCard from "./ui/MonitoringCard";
-import { SearchInput, SortSelect } from "../../components/ui";
-import { Button } from "../../components/button";
+import { Link } from "react-router-dom";
+import { SearchInput, SortSelect } from "../../../components/ui";
+import { Button } from "../../../components/button";
 import { Modal } from "antd";
 import PatientSelect from "./ui/modal/PatientSelect";
 
@@ -62,7 +63,6 @@ const MonitoringList = () => {
       title: "Привязать пациента",
       content: <PatientSelect onSelect={(id) => {
         if (id) {
-          // Здесь можно вызвать createMonitoring(id) или другую логику
           close();
         }
       }} />,
@@ -70,7 +70,6 @@ const MonitoringList = () => {
       footer: null,
       closable: true,
       maskClosable: true,
-      width: 800,
       onCancel: close,
     });
   };
@@ -87,7 +86,14 @@ const MonitoringList = () => {
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {sorted.map((item: any, idx: number) => (
-          <MonitoringCard key={item.id || idx} {...item} />
+          <Link
+            to={`/monitoring/${item.id}`}
+            key={item.id || idx}
+            className="hover:scale-[1.02] transition-transform duration-100"
+            style={{ textDecoration: "none" }}
+          >
+            <MonitoringCard {...item} />
+          </Link>
         ))}
       </div>
       <Button onClick={handleCreateClick} text="Создать" />

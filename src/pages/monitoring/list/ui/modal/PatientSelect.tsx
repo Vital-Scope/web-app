@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { getPatients } from "../../../patients/list/service";
-import type { Patient } from "../../../patients/list/service";
+import { getPatients } from "../../../../patients/list/service";
+import type { Patient } from "../../../../patients/list/service";
 import { Spin, Input } from "antd";
 
 interface PatientSelectProps {
@@ -86,8 +86,7 @@ const PatientSelect: React.FC<PatientSelectProps> = ({ onSelect }) => {
           </div>
           <div className="mt-4 flex justify-end">
             <button
-              className={`px-5 py-2 text-base font-semibold rounded-lg border transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#3B82F6] focus:ring-offset-2
-                ${selectedId ? "bg-[#3B82F6] text-white border-[#3B82F6] hover:bg-[#2563EB] hover:border-[#2563EB] active:bg-[#1D4ED8]" : "bg-[#F3F4F6] text-[#6B7280] border-[#E5E7EB] cursor-not-allowed"}`}
+              className={`rounded-lg border px-5 py-2 text-base font-semibold transition-all duration-150 focus:ring-2 focus:ring-[#3B82F6] focus:ring-offset-2 focus:outline-none ${selectedId ? "border-[#3B82F6] bg-[#3B82F6] text-white hover:border-[#2563EB] hover:bg-[#2563EB] active:bg-[#1D4ED8]" : "cursor-not-allowed border-[#E5E7EB] bg-[#F3F4F6] text-[#6B7280]"}`}
               onClick={() => selectedId && onSelect(selectedId)}
               type="button"
               disabled={!selectedId}

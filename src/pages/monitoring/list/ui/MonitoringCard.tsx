@@ -1,7 +1,7 @@
 import React from "react";
 import InfoLabel, {
   type InfoLabelColor,
-} from "../../../components/ui/InfoLabel";
+} from "../../../../components/ui/InfoLabel";
 import styles from "./MonitoringCard.module.scss";
 import type { MonitoringListItem } from "../api/types";
 
