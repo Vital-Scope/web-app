@@ -1,8 +1,11 @@
 import React from "react";
 
-export type InfoLabelColor = "blue" | "green" | "red" | "purple";
+export type InfoLabelColor = "blue" | "green" | "red" | "purple" | "gray" | "orange";
 
-const colorMap: Record<InfoLabelColor, { bg: string; border: string; text: string }> = {
+const colorMap: Record<
+  InfoLabelColor,
+  { bg: string; border: string; text: string }
+> = {
   blue: {
     bg: "bg-[#E0F2FE]",
     border: "border-[#3B82F6]/30",
@@ -23,6 +26,16 @@ const colorMap: Record<InfoLabelColor, { bg: string; border: string; text: strin
     border: "border-[#8B5CF6]/30",
     text: "text-[#8B5CF6]",
   },
+  gray: {
+    bg: "bg-[#F3F4F6]",
+    border: "border-[#E5E7EB]",
+    text: "text-[#6B7280]",
+  },
+  orange: {
+    bg: "bg-[#FEE4D2]", // slightly redder orange background
+    border: "border-[#FBBF24]/30", // warning border
+    text: "text-[#F59E1B]", // warning text (slightly darker for contrast)
+  },
 };
 
 interface InfoLabelProps {
@@ -31,7 +44,11 @@ interface InfoLabelProps {
   className?: string;
 }
 
-const InfoLabel: React.FC<InfoLabelProps> = ({ color, children, className }) => {
+const InfoLabel: React.FC<InfoLabelProps> = ({
+  color,
+  children,
+  className,
+}) => {
   const c = colorMap[color];
   return (
     <span

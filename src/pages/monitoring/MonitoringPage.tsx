@@ -1,154 +1,202 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useEffect, useMemo, useRef, useState } from "react";
 import Plot from "react-plotly.js";
-import type { MonitoringModel } from "../../models/Monitoring";
-import mapMonitoring from "../../models/Monitoring";
+import { getMonitoringById } from "./api";
+import { useParams } from "react-router";
+import { Badge, Spin, Avatar, Switch } from "antd";
+import { mapSensors } from "../../models/Monitoring/sensorMapper";
+import { getPatientById } from "../patients/form/service";
+import { useState, useEffect } from "react";
+import MonitoringInfo from "./ui/monitoringInfo/MonitoringInfo";
+import PatientInfo from "./ui/patientInfo";
 
 const Monitoring = () => {
-  const { data: Data, isLoading } = useQuery({
-    queryKey: ["getMonitoringData"],
-    queryFn: async () => {
-      try {
-        const url = import.meta.env.VITE_API_URL + `/id`;
-        const res = await axios.get<MonitoringModel>(url, {
-          params: {
-            id: "6c1e77c0-2ad9-48f2-b9cf-112e9a596f70",
-          },
-        });
-        return mapMonitoring(res.data).values.filter((val) => val.value);
-      } catch (error) {
-        console.error(error);
-      }
-    },
+  const [isVerticalLayout, setIsVerticalLayout] = useState(false);
+  const id = useParams().id as string;
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["getMonitoringData", id],
+    queryFn: () => getMonitoringById(id),
+    enabled: !!id,
   });
 
-  const first_xarr = useMemo(() => {
-    return Data?.filter((val) => !val.channelType).map((val) => val.date);
-  }, [Data]);
+  // Получаем данные пациента по patientId из monitoring
+  const { data: patient, isLoading: isPatientLoading } = useQuery({
+    queryKey: ["getPatientById", data?.patientId],
+    queryFn: () =>
+      data?.patientId ? getPatientById(data.patientId) : undefined,
+    enabled: !!data?.patientId,
+  });
 
-  const first_yarr = useMemo(() => {
-    return Data?.filter((val) => !val.channelType).map((val) => val.value);
-  }, [Data]);
+  // Маппинг сенсоров для графиков
+  const sensorValues = data?.sensors ? mapSensors(data.sensors) : [];
+  const fetalData = sensorValues.filter((v) => v.channelType === 0);
+  const uterineData = sensorValues.filter((v) => v.channelType === 1);
 
-  const second_xarr = useMemo(() => {
-    return Data?.filter((val) => !val.channelType).map((val) => val.date);
-  }, [Data]);
-
-  const second_yarr = useMemo(() => {
-    return Data?.filter((val) => val.channelType).map((val) => val.value);
-  }, [Data]);
-
-  const [layout, setLayout] = useState<any>({
-    title: { text: "Мониторинг", font: { color: "white" } },
-    paper_bgcolor: "rgba(255, 255, 255, 0.3)",
-    plot_bgcolor: "transparent",
+  // Layout для темного графика
+  const darkLayout = {
+    paper_bgcolor: "#181C23",
+    plot_bgcolor: "#181C23",
+    font: { color: "#F9FAFB" },
     xaxis: {
       showgrid: true,
-      linecolor: "white",
-      tickfont: { color: "white" }, // ← Цвет цифр по X
-      title: { font: { color: "green" } }, // Цвет названия оси X
+      gridcolor: "#23272F",
+      linecolor: "#F9FAFB",
+      tickfont: { color: "#F9FAFB" },
+      title: { font: { color: "#8B5CF6" } },
     },
     yaxis: {
       showgrid: true,
-      linecolor: "white",
-      tickfont: { color: "white" }, // ← Цвет цифр по Y
-      title: { font: { color: "orange" } }, // Цвет названия оси Y
+      gridcolor: "#23272F",
+      linecolor: "#F9FAFB",
+      tickfont: { color: "#F9FAFB" },
+      title: { font: { color: "#3B82F6" } },
     },
-    shapes: [
-      {
-        type: "rect",
-        xref: "paper", // используем относительные координаты по оси X
-        yref: "y", // используем абсолютные значения по оси Y
-        x0: 0, // начало по X (левая граница графика)
-        x1: 1, // конец по X (правая граница графика)
-        y0: 110, // нижняя граница референсной зоны
-        y1: 160, // верхняя граница референсной зоны
-        fillcolor: "rgba(0, 255, 0, 0.3)", // зеленый с прозрачностью
-        line: {
-          width: 0, // убираем границу
-        },
-        layer: "below", // рисуем под графиком
-      },
-      {
-        type: "rect",
-        xref: "paper", // используем относительные координаты по оси X
-        yref: "y", // используем абсолютные значения по оси Y
-        x0: 0, // начало по X (левая граница графика)
-        x1: 1, // конец по X (правая граница графика)
-        y0: 160, // нижняя граница референсной зоны
-        y1: 300, // верхняя граница референсной зоны
-        fillcolor: "rgba(255, 0, 0, 0.3)", // зеленый с прозрачностью
-        line: {
-          width: 0, // убираем границу
-        },
-        layer: "below", // рисуем под графиком
-      },
-      {
-        type: "rect",
-        xref: "paper", // используем относительные координаты по оси X
-        yref: "y", // используем абсолютные значения по оси Y
-        x0: 0, // начало по X (левая граница графика)
-        x1: 1, // конец по X (правая граница графика)
-        y0: 0, // нижняя граница референсной зоны
-        y1: 110, // верхняя граница референсной зоны
-        fillcolor: "rgba(255, 0, 0, 0.3)", // зеленый с прозрачностью
-        line: {
-          width: 0, // убираем границу
-        },
-        layer: "below", // рисуем под графиком
-      },
-    ],
-  });
-
-  const handleRelayout = (figure: Plotly.PlotRelayoutEvent) => {
-    setLayout((prev: any) => ({
-      ...prev,
-      xaxis: {
-        ...prev.xaxis,
-        range: [
-          figure["xaxis.range[0]"] ?? prev.xaxis?.range?.[0],
-          figure["xaxis.range[1]"] ?? prev.xaxis?.range?.[1],
-        ],
-      },
-      yaxis: {
-        ...prev.yaxis,
-        range: [
-          figure["yaxis.range[0]"] ?? prev.yaxis?.range?.[0],
-          figure["yaxis.range[1]"] ?? prev.yaxis?.range?.[1],
-        ],
-      },
-    }));
+    margin: { t: 40, l: 50, r: 30, b: 50 },
+    legend: { orientation: "h" as const, y: -0.2 },
   };
 
   return (
-    <div className="flex justify-center bg-sky-800">
-      <Plot
-        data={[
-          {
-            name: "ЧСС Плода",
-            x: first_xarr,
-            y: first_yarr,
-            type: "scatter",
-            line: {
-              color: "rgba(255, 255, 0, 0.8)",
-            },
-          },
-          {
-            name: "Тонус матки",
-            x: second_xarr,
-            y: second_yarr,
-            type: "scatter",
-            line: {
-              color: "rgba(255, 100, 0, 0.8)",
-            },
-          },
-        ]}
-        layout={layout}
-        config={{ scrollZoom: true, displaylogo: false }}
-        onRelayout={handleRelayout}
-        className="w-full"
-      />
+    <div className="min-h-screen bg-[#F9FAFB]">
+      <div className="max-w-8xl mx-auto flex flex-col gap-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="md:col-span-2">
+            <MonitoringInfo
+              dateStart={data?.dateStart}
+              dateEnd={data?.dateEnd}
+              status={data?.status}
+              result={data?.result}
+              diagnosis={data?.diagnosis}
+              notes={data?.notes}
+              medicalTests={data?.medicalTests}
+            />
+          </div>
+          <div className="md:col-span-1">
+            <PatientInfo patient={patient} isLoading={isPatientLoading} />
+          </div>
+        </div>
+
+        {/* Переключатель расположения графиков */}
+        <div className="flex items-center justify-between rounded-xl border border-[#E5E7EB] bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="font-semibold text-[#1F2937]">
+              Расположение графиков
+            </span>
+            <span className="text-sm text-[#6B7280]">
+              {isVerticalLayout
+                ? "Вертикально (друг под другом)"
+                : "Горизонтально (рядом)"}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-[#6B7280]">Рядом</span>
+            <Switch
+              checked={isVerticalLayout}
+              onChange={setIsVerticalLayout}
+              className="bg-[#8B5CF6]"
+            />
+            <span className="text-sm text-[#6B7280]">Подряд</span>
+          </div>
+        </div>
+
+        {/* Графики - динамическое расположение */}
+        <div
+          className={
+            isVerticalLayout
+              ? "space-y-6"
+              : "grid grid-cols-1 gap-6 md:grid-cols-2"
+          }
+        >
+          <div className="rounded-2xl bg-[#181C23] p-6 shadow-md">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F472B6] text-lg text-white shadow-sm">
+                💓
+              </span>
+              <h3 className="text-xl font-bold text-[#F9FAFB]">ЧСС Плода</h3>
+            </div>
+            {isLoading ? (
+              <div className="flex h-64 items-center justify-center">
+                <Spin size="large" />
+              </div>
+            ) : (
+              <Plot
+                data={[
+                  {
+                    x: fetalData.map((v) => v.date),
+                    y: fetalData.map((v) => v.value),
+                    type: "scatter",
+                    mode: "lines",
+                    line: { color: "#F472B6", width: 3 },
+                    name: "ЧСС Плода",
+                  },
+                ]}
+                layout={{
+                  ...darkLayout,
+                  title: undefined,
+                  height: isVerticalLayout ? 400 : 350,
+                  width: undefined,
+                  autosize: true,
+                  margin: { t: 20, l: 60, r: 30, b: 60 },
+                }}
+                config={{
+                  scrollZoom: true,
+                  displaylogo: false,
+                  responsive: true,
+                }}
+                style={{ width: "100%", height: "100%" }}
+                className="w-full"
+              />
+            )}
+          </div>
+
+          <div className="rounded-2xl bg-[#181C23] p-6 shadow-md">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#8B5CF6] text-lg text-white shadow-sm">
+                📊
+              </span>
+              <h3 className="text-xl font-bold text-[#F9FAFB]">Тонус матки</h3>
+            </div>
+            {isLoading ? (
+              <div className="flex h-64 items-center justify-center">
+                <Spin size="large" />
+              </div>
+            ) : (
+              <Plot
+                data={[
+                  {
+                    x: uterineData.map((v) => v.date),
+                    y: uterineData.map((v) => v.value),
+                    type: "scatter",
+                    mode: "lines",
+                    line: { color: "#8B5CF6", width: 3 },
+                    name: "Тонус матки",
+                  },
+                ]}
+                layout={{
+                  ...darkLayout,
+                  title: undefined,
+                  height: isVerticalLayout ? 400 : 350,
+                  width: undefined,
+                  autosize: true,
+                  margin: { t: 20, l: 60, r: 30, b: 60 },
+                }}
+                config={{
+                  scrollZoom: true,
+                  displaylogo: false,
+                  responsive: true,
+                }}
+                style={{ width: "100%", height: "100%" }}
+                className="w-full"
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="mt-4 flex justify-end gap-4">
+          <button className="rounded-lg border border-[#8B5CF6] bg-white px-5 py-2 font-semibold text-[#8B5CF6] transition hover:bg-[#F3F4F6]">
+            Экспорт
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

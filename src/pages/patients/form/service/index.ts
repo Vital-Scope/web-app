@@ -1,4 +1,23 @@
-export async function createPatient(patient: Omit<Patient, "id">): Promise<Patient | undefined> {
+import axios from "axios";
+import type { Patient } from "../../list/service";
+import type { Monitoring } from "../../../monitoring/api/types";
+
+interface FormDataDto {
+  lastName: string;
+  firstName: string;
+  middleName: string | null;
+  birthDate: string;
+  clientId: string | null;
+  pregnancyWeek: number | null;
+  pregnancyNumber: number | null;
+  anamnesis: string;
+  doctorNotes: string;
+  avatar: string | null;
+}
+
+export async function createPatient(
+  patient: FormDataDto,
+): Promise<Patient | undefined> {
   try {
     const url = import.meta.env.VITE_API_URL + "/api/patient/create";
     const res = await axios.post<Patient>(url, patient);
@@ -8,7 +27,9 @@ export async function createPatient(patient: Omit<Patient, "id">): Promise<Patie
     return undefined;
   }
 }
-export async function updatePatient(patient: Patient): Promise<Patient | undefined> {
+export async function updatePatient(
+  patient: FormDataDto,
+): Promise<Patient | undefined> {
   try {
     const url = import.meta.env.VITE_API_URL + "/api/patient/update";
     const res = await axios.put<Patient>(url, patient);
@@ -18,8 +39,6 @@ export async function updatePatient(patient: Patient): Promise<Patient | undefin
     return undefined;
   }
 }
-import axios from "axios";
-import type { Patient } from "../../list/service";
 
 export async function getPatientById(id: string): Promise<Patient | undefined> {
   try {
