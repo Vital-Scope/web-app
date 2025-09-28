@@ -1,8 +1,8 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getMonitorings } from "./api";
+import { createMonitoring, getMonitorings } from "./api";
 import MonitoringCard from "./ui/MonitoringCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SearchInput, SortSelect } from "../../../components/ui";
 import { Button } from "../../../components/button";
 import { Modal } from "antd";
@@ -43,34 +43,45 @@ function sortData(data: any[], sortBy: string) {
 }
 
 const MonitoringList = () => {
+  const redirect = useNavigate();
   const [sortBy, setSortBy] = React.useState("date");
   const [search, setSearch] = React.useState("");
+  const [modal, contextHolder] = Modal.useModal();
   const { data = [] } = useQuery({
     queryKey: ["monitorings"],
     queryFn: getMonitorings,
   });
+
   const filtered = data.filter((item: any) =>
     (item.patient?.lastName || "")
       .toLowerCase()
       .includes(search.trim().toLowerCase()),
   );
   const sorted = sortData(filtered, sortBy);
-  const [modal, contextHolder] = Modal.useModal();
 
   const handleCreateClick = () => {
-  const close = () => Modal.destroyAll();
+    const close = () => Modal.destroyAll();
     modal.info({
       title: "Привязать пациента",
-      content: <PatientSelect onSelect={(id) => {
-        if (id) {
-          close();
-        }
-      }} />,
+      content: (
+        <PatientSelect
+          onSelect={async (id) => {
+            if (id) {
+              const monitoring = await createMonitoring(id);
+              if (monitoring) {
+                redirect(`/monitoring/${monitoring.id}`);
+                close();
+              }
+            }
+          }}
+        />
+      ),
       icon: null,
       footer: null,
       closable: true,
       maskClosable: true,
       onCancel: close,
+      width: 1000,
     });
   };
   return (
@@ -89,7 +100,7 @@ const MonitoringList = () => {
           <Link
             to={`/monitoring/${item.id}`}
             key={item.id || idx}
-            className="hover:scale-[1.02] transition-transform duration-100"
+            className="transition-transform duration-100 hover:scale-[1.02]"
             style={{ textDecoration: "none" }}
           >
             <MonitoringCard {...item} />

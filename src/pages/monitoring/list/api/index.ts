@@ -1,7 +1,22 @@
+import axios from "axios";
+import { notification } from "antd";
+import type { Monitoring, MonitoringListItem } from "./types";
+
 export async function createMonitoring(patientId: string) {
-  const url = import.meta.env.VITE_API_URL + "/api/monitoring/create";
+  const url = import.meta.env.VITE_API_URL + "/api/monitoring";
+  const data = {
+    dateStart: 0,
+    dateEnd: 0,
+    pregnancyWeek: 0,
+    status: null,
+    result: null,
+    medicalTests: null,
+    diagnosis: "",
+    patientId: patientId,
+    notes: "",
+  };
   try {
-    const response = await axios.post(url, { patientId });
+    const response = await axios.post<Monitoring>(url, data);
     notification.success({
       message: "Мониторинг создан",
       description: "Мониторинг успешно создан для выбранного пациента.",
@@ -12,12 +27,9 @@ export async function createMonitoring(patientId: string) {
       message: "Ошибка",
       description: "Не удалось создать мониторинг.",
     });
-    throw error;
+    return undefined;
   }
 }
-import axios from "axios";
-import { notification } from "antd";
-import type { MonitoringListItem } from "./types";
 
 export async function getMonitorings(): Promise<MonitoringListItem[]> {
   const url = import.meta.env.VITE_API_URL + "/api/monitoring/all";

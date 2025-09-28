@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+
 const formSchema = z.object({
   lastName: z.string().min(1, "Фамилия обязательна"),
   firstName: z.string().min(1, "Имя обязательно"),
@@ -11,6 +12,7 @@ const formSchema = z.object({
   anamnesis: z.string(),
   doctorNotes: z.string(),
   avatar: z.string().nullable(),
+  monitorings: z.any(),
 });
 
 export default formSchema;

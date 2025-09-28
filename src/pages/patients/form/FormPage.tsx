@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import formSchema from "./formSchema";
@@ -10,8 +10,11 @@ import dayjs from "dayjs";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { notification } from "antd";
+import MonitoringBlock from "./ui/MonitoringBlock";
+import type { PregnancyHistoryRow } from "./ui/PregnancyHistoryTable";
 import { useEffect } from "react";
 import { getPatientById, updatePatient, createPatient } from "./service";
+import type { Monitoring } from "../../monitoring/api/types";
 
 type FormValues = z.infer<typeof formSchema>;
 const AVATAR_PLACEHOLDER = null;
@@ -21,6 +24,7 @@ const PatientsFormPage = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const [monitorings, setMonitorings] = useState<Monitoring[]>([]);
   const {
     control,
     handleSubmit,
@@ -47,6 +51,7 @@ const PatientsFormPage = () => {
   async function getPatientInfo(patientId: string) {
     const patient = await getPatientById(patientId);
     if (patient) {
+      setMonitorings(patient.monitorings);
       reset({
         lastName: patient.lastName || "",
         firstName: patient.firstName || "",
@@ -168,6 +173,21 @@ const PatientsFormPage = () => {
           <ObstetricBlock control={control} errors={errors} />
         </div>
       </div>
+
+      <MonitoringBlock
+        data={
+          monitorings.map((m, idx) => ({
+            id: m.id,
+            number: idx + 1,
+            dateStart: m.dateStart || 0,
+            dateEnd: m.dateEnd,
+            pregnancyWeek: m.pregnancyWeek || 0,
+            status: m.status ? (m.status.toLowerCase() as "active" | "completed") : null,
+            result: m.result,
+          })) || []
+        }
+      />
+
       <button
         type="submit"
         className={`mt-4 w-full max-w-md rounded-lg bg-[#10B981] py-2 text-base font-semibold text-white shadow transition-colors hover:bg-[#059669] disabled:cursor-not-allowed disabled:bg-[#F3F4F6] disabled:text-[#6B7280]`}
