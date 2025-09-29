@@ -1,10 +1,26 @@
 
+
 import clsx from "clsx";
 import styles from "../styles.module.scss";
 import { WomanMock } from "../../../../components/icons";
 import InfoLabel from "../../../../components/ui/InfoLabel";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+
+function getYearWord(age: number): string {
+  const lastDigit = age % 10;
+  const lastTwoDigits = age % 100;
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+    return 'лет';
+  }
+  if (lastDigit === 1) {
+    return 'год';
+  }
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return 'года';
+  }
+  return 'лет';
+}
 
 
 export interface DashboardItemPatient {
@@ -52,7 +68,7 @@ const DashboardItem: React.FC<DashboardItemProps> = ({
             <span>{firstName}</span>
           </div>
           <div className="mt-1 flex items-start gap-1 2xl:flex-row 2xl:items-center 2xl:gap-2">
-            <InfoLabel color="blue">{age}&nbsp;лет</InfoLabel>
+            <InfoLabel color="blue">{age}&nbsp;{getYearWord(age)}</InfoLabel>
             <InfoLabel color="green">{pregnancyWeek}&nbsp;неделя</InfoLabel>
           </div>
         </div>

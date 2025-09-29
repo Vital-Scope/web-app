@@ -28,6 +28,7 @@ export interface Monitoring {
   sensors: Sensor[];
   createdAt: number | null;
   updatedAt: number | null;
+  fullName: string;
 }
 
 export type MonitoringListItem = Omit<Monitoring, "sensors">;

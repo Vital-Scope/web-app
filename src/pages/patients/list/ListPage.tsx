@@ -63,7 +63,7 @@ const PatientsListPage = () => {
             lastName={patient.lastName}
             age={
               new Date().getFullYear() -
-              new Date(patient.birthDate).getFullYear()
+              new Date(patient.birthDate * 1000).getFullYear()
             }
             pregnancyWeek={patient.pregnancyWeek || 0}
             anamnesis={patient.anamnesis}

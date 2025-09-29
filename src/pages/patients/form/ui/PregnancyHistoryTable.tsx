@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "antd";
 import InfoLabel from "../../../../components/ui/InfoLabel";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 export type PregnancyHistoryRow = {
   id: string;
@@ -24,7 +25,10 @@ const statusMap: Record<string, { label: string; color: "blue" | "gray" }> = {
   },
 };
 
-const resultLabelMap: Record<string, { label: string; color: "green" | "red" | "orange" }> = {
+const resultLabelMap: Record<
+  string,
+  { label: string; color: "green" | "red" | "orange" }
+> = {
   Regular: { label: "В норме", color: "green" },
   Hypoxia: { label: "Гипоксия", color: "red" },
   Risk: { label: "Риск", color: "orange" },
@@ -46,7 +50,7 @@ const columns = [
     key: "dateStart",
     render: (value: number) => (
       <span className="text-[#6B7280]">
-        {value ? new Date(value).toLocaleDateString('ru-RU') : "-"}
+        {value ? new Date(value * 1000).toLocaleDateString("ru-RU") : "-"}
       </span>
     ),
   },
@@ -56,7 +60,7 @@ const columns = [
     key: "dateEnd",
     render: (value: number | null) => (
       <span className="text-[#6B7280]">
-        {value ? new Date(value).toLocaleDateString('ru-RU') : "-"}
+        {value ? new Date(value * 1000).toLocaleDateString("ru-RU") : "-"}
       </span>
     ),
   },
@@ -102,11 +106,9 @@ const columns = [
   },
 ];
 
-
 interface Props {
   data: PregnancyHistoryRow[];
 }
-
 
 const PregnancyHistoryTable: React.FC<Props> = ({ data }) => {
   const navigate = useNavigate();
@@ -120,14 +122,18 @@ const PregnancyHistoryTable: React.FC<Props> = ({ data }) => {
         bordered={false}
         showHeader={true}
         className="monitoring-table"
-        style={{ 
+        style={{
           background: "#fff",
         }}
         locale={{
           emptyText: (
             <div className="py-8 text-center">
-              <div className="text-[#6B7280] text-sm">Нет данных для отображения</div>
-              <div className="text-[#9CA3AF] text-xs mt-1">Добавьте первый мониторинг</div>
+              <div className="text-sm text-[#6B7280]">
+                Нет данных для отображения
+              </div>
+              <div className="mt-1 text-xs text-[#9CA3AF]">
+                Добавьте первый мониторинг
+              </div>
             </div>
           ),
           filterConfirm: "ОК",
@@ -145,21 +151,22 @@ const PregnancyHistoryTable: React.FC<Props> = ({ data }) => {
               navigate(`/monitoring/${record.id}`);
             }
           },
-          className: "hover:bg-[#F9FAFB] transition-colors duration-150 cursor-pointer",
+          className:
+            "hover:bg-[#F9FAFB] transition-colors duration-150 cursor-pointer",
         })}
         components={{
           header: {
             cell: (props: any) => (
-              <th 
-                {...props} 
-                className="bg-[#F9FAFB] border-b border-[#E5E7EB] px-4 py-3 text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wider"
+              <th
+                {...props}
+                className="border-b border-[#E5E7EB] bg-[#F9FAFB] px-4 py-3 text-left text-xs font-semibold tracking-wider text-[#6B7280] uppercase"
               />
             ),
           },
           body: {
             cell: (props: any) => (
-              <td 
-                {...props} 
+              <td
+                {...props}
                 className="border-b border-[#F3F4F6] px-4 py-3 text-sm"
               />
             ),

@@ -7,7 +7,7 @@ export interface Patient {
   lastName: string;
   firstName: string;
   middleName: string | null;
-  birthDate: string;
+  birthDate: number;
   clientId: string | null;
   pregnancyWeek: number | null;
   pregnancyNumber: number | null;

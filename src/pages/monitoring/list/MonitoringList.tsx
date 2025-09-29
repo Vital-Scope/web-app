@@ -7,6 +7,7 @@ import { SearchInput, SortSelect } from "../../../components/ui";
 import { Button } from "../../../components/button";
 import { Modal } from "antd";
 import PatientSelect from "./ui/modal/PatientSelect";
+import type { MonitoringListItem } from "./api/types";
 
 const sortOptions = [
   { value: "lastName", label: "По фамилии" },
@@ -57,7 +58,7 @@ const MonitoringList = () => {
       .toLowerCase()
       .includes(search.trim().toLowerCase()),
   );
-  const sorted = sortData(filtered, sortBy);
+  const sorted: MonitoringListItem[] = sortData(filtered, sortBy);
 
   const handleCreateClick = () => {
     const close = () => Modal.destroyAll();
@@ -96,7 +97,7 @@ const MonitoringList = () => {
         <SortSelect value={sortBy} onChange={setSortBy} options={sortOptions} />
       </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {sorted.map((item: any, idx: number) => (
+        {sorted.map((item, idx: number) => (
           <Link
             to={`/monitoring/${item.id}`}
             key={item.id || idx}
