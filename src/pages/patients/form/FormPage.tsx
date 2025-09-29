@@ -11,7 +11,6 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { notification } from "antd";
 import MonitoringBlock from "./ui/MonitoringBlock";
-import type { PregnancyHistoryRow } from "./ui/PregnancyHistoryTable";
 import { useEffect } from "react";
 import { getPatientById, updatePatient, createPatient } from "./service";
 import type { Monitoring } from "../../monitoring/api/types";
@@ -56,9 +55,7 @@ const PatientsFormPage = () => {
         lastName: patient.lastName || "",
         firstName: patient.firstName || "",
         middleName: patient.middleName || "",
-        birthDate: patient.birthDate
-          ? Date.parse(patient.birthDate)
-          : undefined,
+        birthDate: patient.birthDate ? patient.birthDate : undefined,
         clientId: patient.clientId || "",
         pregnancyWeek:
           patient.pregnancyWeek != null
@@ -79,14 +76,14 @@ const PatientsFormPage = () => {
     if (!id) return;
     getPatientInfo(id);
   }, [id, reset]);
-
+ 
   const handleCreate = async () => {
     const values = getValues();
     const payload = {
       ...values,
       pregnancyWeek: Number(values.pregnancyWeek),
       pregnancyNumber: Number(values.pregnancyNumber),
-      birthDate: dayjs(values.birthDate).format("YYYY-MM-DD"),
+      birthDate: values.birthDate,
       avatar: values.avatar,
       clientId: uuid.v4(),
     };
@@ -110,7 +107,7 @@ const PatientsFormPage = () => {
       ...values,
       pregnancyWeek: Number(values.pregnancyWeek),
       pregnancyNumber: Number(values.pregnancyNumber),
-      birthDate: dayjs(values.birthDate).format("YYYY-MM-DD"),
+      birthDate: values.birthDate,
       avatar: values.avatar,
       clientId: values.clientId,
       id: id ? id : "",
@@ -182,7 +179,9 @@ const PatientsFormPage = () => {
             dateStart: m.dateStart || 0,
             dateEnd: m.dateEnd,
             pregnancyWeek: m.pregnancyWeek || 0,
-            status: m.status ? (m.status.toLowerCase() as "active" | "completed") : null,
+            status: m.status
+              ? (m.status.toLowerCase() as "active" | "completed")
+              : null,
             result: m.result,
           })) || []
         }

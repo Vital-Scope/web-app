@@ -2,14 +2,21 @@ import { useQuery } from "@tanstack/react-query";
 import Plot from "react-plotly.js";
 import { getMonitoringById } from "./api";
 import { useParams } from "react-router";
-import { Badge, Spin, Avatar, Switch } from "antd";
+import { Spin, Switch } from "antd";
 import { mapSensors } from "../../models/Monitoring/sensorMapper";
 import { getPatientById } from "../patients/form/service";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import MonitoringInfo from "./ui/monitoringInfo/MonitoringInfo";
 import PatientInfo from "./ui/patientInfo";
+import { PrimaryButton } from "../../components/button";
+import { useSessionStore } from "../../store/useSessionStore";
 
 const Monitoring = () => {
+  const {
+    updateSession,
+    data: sessionData,
+  } = useSessionStore();
+  const [loading, setLoading] = useState(false);
   const [isVerticalLayout, setIsVerticalLayout] = useState(false);
   const id = useParams().id as string;
 
@@ -53,6 +60,23 @@ const Monitoring = () => {
     },
     margin: { t: 40, l: 50, r: 30, b: 50 },
     legend: { orientation: "h" as const, y: -0.2 },
+  };
+
+  const isCurrent = id && sessionData?.monitoringId === id;
+  const buttonText = isCurrent ? "Закончить мониторинг" : "Начать мониторинг";
+  const buttonColor = isCurrent
+    ? "bg-[#EF4444] hover:bg-[#DC2626] focus:ring-[#EF4444] active:shadow-[0_0_16px_4px_#EF444455]"
+    : "bg-[#10B981] hover:bg-[#059669] focus:ring-[#10B981] active:shadow-[0_0_16px_4px_#10B98155]";
+
+  const clickHandler = async () => {
+    setLoading(true);
+    try {
+      updateSession(id);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -192,6 +216,20 @@ const Monitoring = () => {
         </div>
 
         <div className="mt-4 flex justify-end gap-4">
+          <PrimaryButton
+            onClick={clickHandler}
+            className={buttonColor}
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <Spin size="small" />
+                {buttonText}
+              </span>
+            ) : (
+              buttonText
+            )}
+          </PrimaryButton>
           <button className="rounded-lg border border-[#8B5CF6] bg-white px-5 py-2 font-semibold text-[#8B5CF6] transition hover:bg-[#F3F4F6]">
             Экспорт
           </button>
