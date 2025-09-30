@@ -36,6 +36,7 @@ export interface DashboardItemPatient {
 type DashboardItemProps = DashboardItemPatient;
 
 
+
 const DashboardItem: React.FC<DashboardItemProps> = ({
   id,
   lastName,
@@ -53,29 +54,33 @@ const DashboardItem: React.FC<DashboardItemProps> = ({
   return (
     <div
       className={clsx(
-        "flex cursor-pointer flex-col gap-2 rounded-xl border border-[#E5E7EB] bg-[#FFFFFF] p-4 text-[#1F2937] shadow-[0_4px_24px_0_#E5E7EB] transition-all select-none hover:bg-[#EFF6FF] hover:shadow-[0_0_16px_#3B82F633]",
+        "relative flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-[0_2px_16px_0_rgba(244,114,182,0.08)] transition-all duration-200 cursor-pointer hover:shadow-[0_4px_32px_0_rgba(244,114,182,0.16)] hover:border-pink-300",
         styles.animation,
       )}
       onClick={handleClick}
+      tabIndex={0}
+      role="button"
+      aria-pressed="false"
     >
       <div className="flex items-center gap-4">
-        <div className="flex flex-col items-center justify-center">
+        <div className="h-14 w-14 rounded-xl bg-pink-100 flex items-center justify-center shadow-sm">
           <WomanMock />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-[#3B82F6]">{lastName}</span>
-            <span>{firstName}</span>
+            <span className="font-bold text-lg text-pink-500 truncate">{lastName}</span>
+            <span className="text-lg truncate">{firstName}</span>
           </div>
-          <div className="mt-1 flex items-start gap-1 2xl:flex-row 2xl:items-center 2xl:gap-2">
-            <InfoLabel color="blue">{age}&nbsp;{getYearWord(age)}</InfoLabel>
-            <InfoLabel color="green">{pregnancyWeek}&nbsp;неделя</InfoLabel>
+          <div className="flex gap-2 mt-1">
+            <span className="inline-block rounded bg-blue-50 px-2 py-0.5 text-xs text-blue-700 font-semibold">{age} {getYearWord(age)}</span>
+            <span className="inline-block rounded bg-green-50 px-2 py-0.5 text-xs text-green-700 font-semibold">{pregnancyWeek} неделя</span>
           </div>
         </div>
       </div>
-      <div className="mt-2 min-h-[40px] text-sm text-[#6B7280]">
-        {anamnesis}
+      <div className="border-t border-gray-100 pt-3 mt-2">
+        <div className="text-sm text-gray-500 min-h-[32px]">{anamnesis}</div>
       </div>
+      <span className="absolute right-6 top-6 text-xs text-pink-400 opacity-0 group-hover:opacity-100 transition-opacity">Подробнее</span>
     </div>
   );
 };
