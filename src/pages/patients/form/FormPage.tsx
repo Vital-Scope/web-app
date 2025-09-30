@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { notification } from "antd";
 import MonitoringBlock from "./ui/MonitoringBlock";
 import { useEffect } from "react";
-import { getPatientById, updatePatient, createPatient } from "./service";
-import type { Monitoring } from "../../monitoring/api/types";
+import { getPatientById, updatePatient, createPatient } from "../../../service/patients";
+import type { Monitoring } from "../../../service/monitoring/api";
 
 type FormValues = z.infer<typeof formSchema>;
 const AVATAR_PLACEHOLDER = null;

@@ -4,7 +4,7 @@ import { SearchInput, SortSelect } from "../../../components/ui";
 import DashboardItem from "./ui/Item";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPatients } from "./service";
+import { getPatients } from "../../../service/patients";
 
 const sortOptions = [
   { value: "lastName", label: "По фамилии" },

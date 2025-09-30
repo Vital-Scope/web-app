@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { getPatients } from "../../../../patients/list/service";
-import type { Patient } from "../../../../patients/list/service";
 import { Spin, Input } from "antd";
+import { getPatients, type Patient } from "../../../../../service/patients";
 
 interface PatientSelectProps {
   onSelect: (id: string | null) => void;

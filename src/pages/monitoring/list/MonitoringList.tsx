@@ -1,13 +1,12 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { createMonitoring, getMonitorings } from "./api";
 import MonitoringCard from "./ui/MonitoringCard";
 import { Link, useNavigate } from "react-router-dom";
 import { SearchInput, SortSelect } from "../../../components/ui";
 import { Button } from "../../../components/button";
 import { Modal } from "antd";
 import PatientSelect from "./ui/modal/PatientSelect";
-import type { MonitoringListItem } from "./api/types";
+import { createMonitoring, getMonitorings, type MonitoringListItem } from "../../../service/monitoring/api";
 
 const sortOptions = [
   { value: "lastName", label: "По фамилии" },
