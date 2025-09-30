@@ -10,12 +10,14 @@ import MonitoringInfo from "./ui/monitoringInfo/MonitoringInfo";
 import PatientInfo from "./ui/patientInfo";
 import { PrimaryButton } from "../../components/button";
 import { useSessionStore } from "../../store/useSessionStore";
+import useSignalRSensorPage from "../../hooks/useSignalRSensorPage";
 
 const Monitoring = () => {
   const {
     updateSession,
     data: sessionData,
   } = useSessionStore();
+  const ref = useSignalRSensorPage();
   const [loading, setLoading] = useState(false);
   const [isVerticalLayout, setIsVerticalLayout] = useState(false);
   const id = useParams().id as string;
