@@ -8,6 +8,8 @@ import { useSessionStore } from "../../store/useSessionStore";
 import useSignalRSensorPage from "../../hooks/useSignalRSensorPage";
 import { getPatientById } from "../../service/patients";
 import FirstGraph from "./ui/FirstGraph";
+import PrimaryButton from "../../components/button/PrimaryButton";
+import { Spin } from "antd";
 
 const Monitoring = () => {
   const { updateSession, data: sessionData } = useSessionStore();
@@ -36,22 +38,22 @@ const Monitoring = () => {
     [data],
   );
   const sliceIdx = 1500;
-  const xarr = useMemo(
-    () => {
-      let prev = 0;
-      const result = [];
-      const set = Array.from(new Set(first_arr?.map((el) => el.time))).slice(0, sliceIdx);
-      for (const i of set) {
-        if (Math.trunc(i) === prev) continue;
-        else {
-          result.push(Math.trunc(i));
-          prev = Math.trunc(i);
-        }
+  const xarr = useMemo(() => {
+    let prev = 0;
+    const result = [];
+    const set = Array.from(new Set(first_arr?.map((el) => el.time))).slice(
+      0,
+      sliceIdx,
+    );
+    for (const i of set) {
+      if (Math.trunc(i) === prev) continue;
+      else {
+        result.push(Math.trunc(i));
+        prev = Math.trunc(i);
       }
-      return result;
-    }, 
-    [first_arr],
-  );
+    }
+    return result;
+  }, [first_arr]);
 
   const first_xarr = useMemo(() => {
     return Array.from(
@@ -139,7 +141,7 @@ const Monitoring = () => {
         </div>
         <FirstGraph x_arr={xarr} y_arr={first_yarr} />
 
-        {/*  <div className="mt-4 flex justify-end gap-4">
+        <div className="mt-4 flex justify-end gap-4">
           <PrimaryButton
             onClick={clickHandler}
             className={buttonColor}
@@ -157,7 +159,7 @@ const Monitoring = () => {
           <button className="rounded-lg border border-[#8B5CF6] bg-white px-5 py-2 font-semibold text-[#8B5CF6] transition hover:bg-[#F3F4F6]">
             Экспорт
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );

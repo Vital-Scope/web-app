@@ -123,8 +123,8 @@ const FirstGraph = ({ x_arr, y_arr }: Props) => {
             marker: {
               size: 6,
               color: "#3B82F6",
-              line: { color: "#F9FAFB", width: 1 },
-              symbol: "circle",
+              line: { color: "#F9FAFB", width: 0.5 },
+              symbol: "dot",
             },
             name: "channel 0",
             hoverlabel: {
