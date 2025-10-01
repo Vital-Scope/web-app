@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Plot from "react-plotly.js";
+import useSignalRSensorPage from "../../../hooks/useSignalRSensorPage";
 
 interface Props {
   x_arr?: number[];
@@ -7,26 +8,38 @@ interface Props {
 }
 
 const FirstGraph = ({ x_arr, y_arr }: Props) => {
+  const { x, y } = useSignalRSensorPage();
+
   const [layout, setLayout] = useState<any>({
     title: {
       text: "Мониторинг",
-      font: { color: "#F9FAFB", size: 28, family: 'Inter, sans-serif', weight: 700 },
+      font: {
+        color: "#F9FAFB",
+        size: 28,
+        family: "Inter, sans-serif",
+        weight: 700,
+      },
       x: 0.05,
-      xanchor: 'left',
+      xanchor: "left",
     },
     paper_bgcolor: "#111827", // карточка чуть светлее фона
     plot_bgcolor: "#1F2937", // глубокий темный фон
-    height: 520,
-    margin: { l: 60, r: 30, t: 60, b: 50 },
+    height: 400,
+    margin: { l: 50, r: 15, t: 60, b: 50 },
     xaxis: {
       showgrid: true,
       gridcolor: "#374151", // сетка темно-серая
       zeroline: false,
       linecolor: "#6B7280", // ось
-      tickfont: { color: "#F3F4F6", size: 14, family: 'Inter, sans-serif' },
+      tickfont: { color: "#F3F4F6", size: 14, family: "Inter, sans-serif" },
       title: {
         text: "Время",
-        font: { color: "#8B5CF6", size: 16, family: 'Inter, sans-serif', weight: 600 },
+        font: {
+          color: "#8B5CF6",
+          size: 16,
+          family: "Inter, sans-serif",
+          weight: 600,
+        },
         standoff: 10,
       },
     },
@@ -35,10 +48,15 @@ const FirstGraph = ({ x_arr, y_arr }: Props) => {
       gridcolor: "#374151",
       zeroline: false,
       linecolor: "#6B7280",
-      tickfont: { color: "#F3F4F6", size: 14, family: 'Inter, sans-serif' },
+      tickfont: { color: "#F3F4F6", size: 14, family: "Inter, sans-serif" },
       title: {
         text: "Показатель",
-        font: { color: "#8B5CF6", size: 16, family: 'Inter, sans-serif', weight: 600 },
+        font: {
+          color: "#8B5CF6",
+          size: 16,
+          family: "Inter, sans-serif",
+          weight: 600,
+        },
         standoff: 10,
       },
     },
@@ -86,7 +104,7 @@ const FirstGraph = ({ x_arr, y_arr }: Props) => {
     showlegend: false,
     dragmode: "pan",
     hovermode: "x unified",
-    font: { color: "#F3F4F6", family: 'Inter, sans-serif' },
+    font: { color: "#F3F4F6", family: "Inter, sans-serif" },
     // Скругление и тень для карточки (визуально через Tailwind, но для Plotly — только цвет)
   });
 
@@ -111,12 +129,12 @@ const FirstGraph = ({ x_arr, y_arr }: Props) => {
   };
 
   return (
-    <div className="rounded-2xl shadow-xl bg-[#111827] p-6 transition-all duration-300">
+    <div>
       <Plot
         data={[
           {
-            x: x_arr,
-            y: y_arr,
+            x: x,
+            y: y,
             type: "scatter",
             mode: "lines+markers",
             line: { color: "#8B5CF6", width: 3, shape: "spline" },
@@ -130,7 +148,7 @@ const FirstGraph = ({ x_arr, y_arr }: Props) => {
             hoverlabel: {
               bgcolor: "#111827",
               bordercolor: "#8B5CF6",
-              font: { color: "#F9FAFB", family: 'Inter, sans-serif' },
+              font: { color: "#F9FAFB", family: "Inter, sans-serif" },
             },
           },
         ]}
@@ -139,7 +157,12 @@ const FirstGraph = ({ x_arr, y_arr }: Props) => {
           scrollZoom: true,
           displaylogo: false,
           responsive: true,
-          modeBarButtonsToRemove: ["zoom2d", "zoomIn2d", "zoomOut2d", "autoScale2d"],
+          modeBarButtonsToRemove: [
+            "zoom2d",
+            "zoomIn2d",
+            "zoomOut2d",
+            "autoScale2d",
+          ],
         }}
         onRelayout={handleRelayout}
         style={{ width: "100%", height: "100%" }}

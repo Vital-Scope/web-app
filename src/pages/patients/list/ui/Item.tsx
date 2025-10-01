@@ -72,8 +72,8 @@ const DashboardItem: React.FC<DashboardItemProps> = ({
             <span className="text-lg truncate">{firstName}</span>
           </div>
           <div className="flex gap-2 mt-1">
-            <span className="inline-block rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600 font-medium">{age} {getYearWord(age)}</span>
-            <span className="inline-block rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600 font-medium">{pregnancyWeek} неделя</span>
+            <span className="inline-block rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-600 font-medium">{age} {getYearWord(age)}</span>
+            <span className="inline-block rounded bg-pink-100 px-2 py-0.5 text-xs text-pink-500 font-medium">{pregnancyWeek} неделя</span>
           </div>
         </div>
       </div>

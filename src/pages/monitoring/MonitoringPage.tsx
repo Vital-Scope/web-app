@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import MonitoringInfo from "./ui/monitoringInfo/MonitoringInfo";
 import PatientInfo from "./ui/patientInfo";
 import { useSessionStore } from "../../store/useSessionStore";
-import useSignalRSensorPage from "../../hooks/useSignalRSensorPage";
 import { getPatientById } from "../../service/patients";
 import FirstGraph from "./ui/FirstGraph";
 import PrimaryButton from "../../components/button/PrimaryButton";
@@ -13,7 +12,6 @@ import { Spin } from "antd";
 
 const Monitoring = () => {
   const { updateSession, data: sessionData } = useSessionStore();
-  const wsData = useSignalRSensorPage();
   const [loading, setLoading] = useState(false);
   const id = useParams().id as string;
 
@@ -139,23 +137,23 @@ const Monitoring = () => {
             <PatientInfo patient={patient} isLoading={isPatientLoading} />
           </div>
         </div>
+        <PrimaryButton
+          onClick={clickHandler}
+          className={buttonColor}
+          disabled={loading}
+        >
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <Spin size="small" />
+              {buttonText}
+            </span>
+          ) : (
+            buttonText
+          )}
+        </PrimaryButton>
         <FirstGraph x_arr={xarr} y_arr={first_yarr} />
 
         <div className="mt-4 flex justify-end gap-4">
-          <PrimaryButton
-            onClick={clickHandler}
-            className={buttonColor}
-            disabled={loading}
-          >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <Spin size="small" />
-                {buttonText}
-              </span>
-            ) : (
-              buttonText
-            )}
-          </PrimaryButton>
           <button className="rounded-lg border border-[#8B5CF6] bg-white px-5 py-2 font-semibold text-[#8B5CF6] transition hover:bg-[#F3F4F6]">
             Экспорт
           </button>

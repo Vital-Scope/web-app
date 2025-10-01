@@ -1,15 +1,29 @@
 import MonitoringStatus from "./ui/MonitoringStatus";
 import Logo from "./ui/Logo";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSessionStore } from "../../../store/useSessionStore";
+import axios from "axios";
 
 const Header = () => {
   const { data, loading, startPolling, stopPolling } = useSessionStore();
+  const [deviceStatus, setDeviceStatus] = useState(true);
+
+  const deviceRef = useRef(undefined);
 
   useEffect(() => {
     startPolling();
     return () => stopPolling();
   }, [startPolling, stopPolling]);
+
+  useEffect(() => {
+    const getStatus = async () => {
+      const url = import.meta.env.VITE_API_URL + "/api/health";
+      const resp = await axios.get(url);
+      console.log(resp);
+    }
+
+    getStatus();
+  }, []);
 
   const patientName =
     data && (data.lastName || data.firstName)
