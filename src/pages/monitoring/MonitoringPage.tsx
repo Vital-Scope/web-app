@@ -9,16 +9,18 @@ import { getPatientById } from "../../service/patients";
 import FirstGraph from "./ui/FirstGraph";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { Spin } from "antd";
+import { startStreaming, stopStreaming } from "../../service/proxy";
 
 const Monitoring = () => {
   const { updateSession, data: sessionData } = useSessionStore();
   const [loading, setLoading] = useState(false);
   const id = useParams().id as string;
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["getMonitoringData", id],
     queryFn: () => getMonitoringById(id),
     enabled: !!id,
+
   });
 
   const { data: patient, isLoading: isPatientLoading } = useQuery({
@@ -29,28 +31,14 @@ const Monitoring = () => {
   });
 
   const first_arr = useMemo(
-    () =>
-      data?.sensors
-        .filter((el) => el.channel === "Fhr")
-        .sort((a, b) => a.time - b.time),
+    () => data?.sensors.filter((el) => el.channel === "Fhr"),
     [data],
   );
-  const sliceIdx = 1500;
+
+
   const xarr = useMemo(() => {
-    let prev = 0;
-    const result = [];
-    const set = Array.from(new Set(first_arr?.map((el) => el.time))).slice(
-      0,
-      sliceIdx,
-    );
-    for (const i of set) {
-      if (Math.trunc(i) === prev) continue;
-      else {
-        result.push(Math.trunc(i));
-        prev = Math.trunc(i);
-      }
-    }
-    return result;
+    const set = Array.from(new Set(first_arr?.map((el) => el.time)));
+    return set;
   }, [first_arr]);
 
   const first_xarr = useMemo(() => {
@@ -67,50 +55,33 @@ const Monitoring = () => {
   const first_yarr = useMemo(() => {
     return data?.sensors
       .filter((val) => val.channel === "Fhr")
-      .map((val) => val.value)
-      .slice(0, sliceIdx);
+      .map((val) => val.value);
   }, [data?.sensors]);
-
-  /* const second_xarr = useMemo(() => {
-    return data?.filter((val) => !val.channelType).map((val) => val.date);
-  }, [data]);
-
-  const second_yarr = useMemo(() => {
-    return data?.filter((val) => val.channelType).map((val) => val.value);
-  }, [data]); */
-
-  const darkLayout = {
-    paper_bgcolor: "#181C23",
-    plot_bgcolor: "#181C23",
-    font: { color: "#F9FAFB" },
-    xaxis: {
-      showgrid: true,
-      gridcolor: "#23272F",
-      linecolor: "#F9FAFB",
-      tickfont: { color: "#F9FAFB" },
-      title: { font: { color: "#8B5CF6" } },
-    },
-    yaxis: {
-      showgrid: true,
-      gridcolor: "#23272F",
-      linecolor: "#F9FAFB",
-      tickfont: { color: "#F9FAFB" },
-      title: { font: { color: "#3B82F6" } },
-    },
-    margin: { t: 40, l: 50, r: 30, b: 50 },
-    legend: { orientation: "h" as const, y: -0.2 },
-  };
 
   const isCurrent = id && sessionData?.monitoringId === id;
   const buttonText = isCurrent ? "Закончить мониторинг" : "Начать мониторинг";
-  const buttonColor = isCurrent
-    ? "bg-[#EF4444] hover:bg-[#DC2626] focus:ring-[#EF4444] active:shadow-[0_0_16px_4px_#EF444455]"
-    : "bg-[#10B981] hover:bg-[#059669] focus:ring-[#10B981] active:shadow-[0_0_16px_4px_#10B98155]";
+  const loadingText = isCurrent ? "Завершение..." : "Запуск мониторинга...";
+
+  // Определяем цвет кнопки в зависимости от состояния
+  const getButtonColor = () => {
+    if (loading) {
+      return "bg-[#6B7280] hover:bg-[#6B7280] focus:ring-[#6B7280] cursor-not-allowed opacity-70";
+    }
+    return isCurrent
+      ? "bg-[#EF4444] hover:bg-[#DC2626] focus:ring-[#EF4444] active:shadow-[0_0_16px_4px_#EF444455]"
+      : "bg-[#10B981] hover:bg-[#059669] focus:ring-[#10B981] active:shadow-[0_0_16px_4px_#10B98155]";
+  };
 
   const clickHandler = async () => {
     setLoading(true);
     try {
-      updateSession(id);
+      if (!isCurrent) {
+        await startStreaming(id);
+      } else {
+        await stopStreaming(id);
+        setTimeout(refetch, 2000);
+      }
+      await updateSession(id);
     } catch (error) {
       console.error(error);
     } finally {
@@ -139,13 +110,13 @@ const Monitoring = () => {
         </div>
         <PrimaryButton
           onClick={clickHandler}
-          className={buttonColor}
+          className={getButtonColor()}
           disabled={loading}
         >
           {loading ? (
             <span className="flex items-center gap-2">
               <Spin size="small" />
-              {buttonText}
+              {loadingText}
             </span>
           ) : (
             buttonText

@@ -43,8 +43,12 @@ export const useSessionStore = create<SessionStore>((set, get) => {
       const res = await axios.patch<Session>(url, {
         monitoringId: targetId,
         status,
-      });
-      set({ data: res.data, loading: false });
+      }); 
+      if (res.data.status === "Completed") {
+        set({ data: null, loading: false });
+      } else {
+        set({ data: res.data, loading: false });
+      }
     } catch (error) {}
   };
 

@@ -3,12 +3,13 @@ import Logo from "./ui/Logo";
 import { useEffect, useRef, useState } from "react";
 import { useSessionStore } from "../../../store/useSessionStore";
 import axios from "axios";
+import { getStatus } from "../../../service/proxy";
 
 const Header = () => {
   const { data, loading, startPolling, stopPolling } = useSessionStore();
   const [deviceStatus, setDeviceStatus] = useState(true);
 
-  const deviceRef = useRef(undefined);
+  const deviceRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     startPolling();
@@ -16,13 +17,15 @@ const Header = () => {
   }, [startPolling, stopPolling]);
 
   useEffect(() => {
-    const getStatus = async () => {
-      const url = import.meta.env.VITE_API_URL + "/api/health";
-      const resp = await axios.get(url);
-      console.log(resp);
+    const getDeviceStatus = async () => {
+      const status = await getStatus();
+      setDeviceStatus(status);
     }
+    deviceRef.current = setInterval(getDeviceStatus, 10000);
 
-    getStatus();
+    return () => {
+      clearInterval(deviceRef.current);
+    }
   }, []);
 
   const patientName =
@@ -44,6 +47,7 @@ const Header = () => {
           patient={patientName}
           isActive={data?.status === "Active"}
           monitoringId={data?.monitoringId}
+          deviceStatus={deviceStatus}
         />
       </div>
     </header>

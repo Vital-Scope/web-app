@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import Plot from "react-plotly.js";
 import useSignalRSensorPage from "../../../hooks/useSignalRSensorPage";
 
@@ -8,7 +8,15 @@ interface Props {
 }
 
 const FirstGraph = ({ x_arr, y_arr }: Props) => {
-  const { x, y } = useSignalRSensorPage();
+  // Подготавливаем данные из API для передачи в хук
+  const initialData = useMemo(() => {
+    if (x_arr && y_arr) {
+      return { x: x_arr, y: y_arr };
+    }
+    return undefined;
+  }, [x_arr, y_arr]);
+
+  const { x, y } = useSignalRSensorPage({ initialData });
 
   const [layout, setLayout] = useState<any>({
     title: {

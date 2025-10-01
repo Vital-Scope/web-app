@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Spin, Input } from "antd";
 import { getPatients, type Patient } from "../../../../../service/patients";
+import dayjs from "dayjs";
 
 interface PatientSelectProps {
   onSelect: (id: string | null) => void;
@@ -55,12 +56,7 @@ const PatientSelect: React.FC<PatientSelectProps> = ({ onSelect }) => {
               {filtered.map((p) => {
                 let birthDate = "";
                 if (p.birthDate) {
-                  const d = new Date(p.birthDate);
-                  birthDate = d.toLocaleDateString("ru-RU", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                  });
+                  birthDate = dayjs(p.birthDate * 1000).format("DD.MM.YYYY");
                 }
                 const isSelected = selectedId === p.id;
                 return (

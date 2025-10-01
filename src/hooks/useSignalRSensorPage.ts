@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 
 interface Sensor {
@@ -7,12 +7,35 @@ interface Sensor {
   value: number;
 }
 
-const useSignalRSensorPage = () => {
+interface UseSignalRSensorPageProps {
+  initialData?: { x: number[]; y: number[] };
+}
+
+const useSignalRSensorPage = ({ initialData }: UseSignalRSensorPageProps = {}) => {
   const [data, setData] = useState<{ x: number[]; y: number[] }>({
-    x: [],
-    y: [],
+    x: initialData?.x || [],
+    y: initialData?.y || [],
   });
   const connectionRef = useRef<signalR.HubConnection | null>(null);
+  const isInitializedRef = useRef(false);
+
+  // Обновляем данные при изменении initialData только если еще не инициализированы
+  useEffect(() => {
+    if (initialData && !isInitializedRef.current) {
+      setData({
+        x: initialData.x,
+        y: initialData.y,
+      });
+      isInitializedRef.current = true;
+    }
+  }, [initialData]);
+
+  // Сбрасываем флаг инициализации при размонтировании компонента
+  useEffect(() => {
+    return () => {
+      isInitializedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const url = `${import.meta.env.VITE_API_URL}/sensor-page`;
