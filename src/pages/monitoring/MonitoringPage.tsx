@@ -16,7 +16,7 @@ const Monitoring = () => {
   const [loading, setLoading] = useState(false);
   const id = useParams().id as string;
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ["getMonitoringData", id],
     queryFn: () => getMonitoringById(id),
     enabled: !!id,
@@ -87,6 +87,7 @@ const Monitoring = () => {
               pregnancyWeek={data?.pregnancyWeek}
               status={data?.status}
               result={data?.result}
+              percent={data?.percent}
               diagnosis={data?.diagnosis}
               notes={data?.notes || undefined}
               medicalTests={data?.medicalTests}

@@ -20,6 +20,12 @@ const privateRoutes = [
     isMenu: true,
   },
   {
+    path: "/patients/create",
+    Component: PatientsForm,
+    label: "Создание пациента",
+    isMenu: false,
+  },
+  {
     path: "/patients/:id",
     Component: PatientsForm,
     label: "Пациенты",

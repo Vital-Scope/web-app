@@ -12,6 +12,7 @@ export type PregnancyHistoryRow = {
   pregnancyWeek: number;
   status: "active" | "completed" | null;
   result: string | null;
+  percent: number | null;
 };
 
 const statusMap: Record<string, { label: string; color: "blue" | "gray" }> = {
@@ -103,6 +104,16 @@ const columns = [
         <span className="text-[#6B7280]">-</span>
       );
     },
+  },
+  {
+    title: "Процент",
+    dataIndex: "percent",
+    key: "percent",
+    render: (value: number | null) => (
+      <span className="font-medium text-[#1F2937]">
+        {value !== null ? `${value.toFixed(2)}%` : "-"}
+      </span>
+    ),
   },
 ];
 

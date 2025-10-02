@@ -1,29 +1,18 @@
-import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import formSchema from "./formSchema";
+import { useCallback } from "react";
+import { useParams } from "react-router";
 import ProfileBlock from "./ui/ProfileBlock";
 import ObstetricBlock from "./ui/ObstetricBlock";
-import * as uuid from "uuid";
-import { z } from "zod";
-import dayjs from "dayjs";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
-import { notification } from "antd";
 import MonitoringBlock from "./ui/MonitoringBlock";
-import { useEffect } from "react";
-import { getPatientById, updatePatient, createPatient } from "../../../service/patients";
-import type { Monitoring } from "../../../service/monitoring/api";
-
-type FormValues = z.infer<typeof formSchema>;
-const AVATAR_PLACEHOLDER = null;
+import { usePatientForm } from "./hooks/usePatientForm";
+import { useAvatarUpload } from "./hooks/useAvatarUpload";
+import { usePatientActions } from "./hooks/usePatientActions";
 
 const PatientsFormPage = () => {
   const { id } = useParams();
+  
+  // Если id === "create", то это создание нового пациента
+  const patientId = id === "create" ? undefined : id;
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
-  const [monitorings, setMonitorings] = useState<Monitoring[]>([]);
   const {
     control,
     handleSubmit,
@@ -31,121 +20,42 @@ const PatientsFormPage = () => {
     getValues,
     reset,
     formState: { errors, isDirty },
-  } = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      lastName: "",
-      firstName: "",
-      middleName: "",
-      birthDate: undefined,
-      clientId: "123456",
-      pregnancyWeek: undefined,
-      pregnancyNumber: undefined,
-      anamnesis: "",
-      doctorNotes: "",
-      avatar: AVATAR_PLACEHOLDER,
-    },
-  });
+    monitorings,
+  } = usePatientForm(patientId);
 
-  async function getPatientInfo(patientId: string) {
-    const patient = await getPatientById(patientId);
-    if (patient) {
-      setMonitorings(patient.monitorings);
-      reset({
-        lastName: patient.lastName || "",
-        firstName: patient.firstName || "",
-        middleName: patient.middleName || "",
-        birthDate: patient.birthDate ? patient.birthDate : undefined,
-        clientId: patient.clientId || "",
-        pregnancyWeek:
-          patient.pregnancyWeek != null
-            ? String(patient.pregnancyWeek)
-            : undefined,
-        pregnancyNumber:
-          patient.pregnancyNumber != null
-            ? String(patient.pregnancyNumber)
-            : undefined,
-        anamnesis: patient.anamnesis || "",
-        doctorNotes: patient.doctorNotes || "",
-        avatar: patient.avatar || AVATAR_PLACEHOLDER,
-      });
-    }
-  }
+  const { handleSubmit: handlePatientSubmit, isEditMode } = usePatientActions(patientId);
 
-  useEffect(() => {
-    if (!id) return;
-    getPatientInfo(id);
-  }, [id, reset]);
- 
-  const handleCreate = async () => {
-    const values = getValues();
-    const payload = {
-      ...values,
-      pregnancyWeek: Number(values.pregnancyWeek),
-      pregnancyNumber: Number(values.pregnancyNumber),
-      birthDate: values.birthDate,
-      avatar: values.avatar,
-      clientId: uuid.v4(),
-    };
-    try {
-      const created = await createPatient(payload);
-      if (created && created.id) {
-        reset(getValues());
-        navigate(`/patients/${created.id}`);
-      } else {
-        reset(getValues());
-        navigate("/patients");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const handleAvatarChange = useCallback((avatar: string | null) => {
+    setValue("avatar", avatar, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  }, [setValue]);
 
-  const handleUpdate = async () => {
-    const values = getValues();
-    const payload = {
-      ...values,
-      pregnancyWeek: Number(values.pregnancyWeek),
-      pregnancyNumber: Number(values.pregnancyNumber),
-      birthDate: values.birthDate,
-      avatar: values.avatar,
-      clientId: values.clientId,
-      id: id ? id : "",
-    };
-    try {
-      await updatePatient(payload);
-      notification.success({
-        message: "Пациент обновлён",
-        description: "Данные пациента успешно сохранены.",
-        placement: "topRight",
-        duration: 3,
-      });
-      reset(getValues());
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const {
+    fileInputRef,
+    handleAvatarClick,
+    handleAvatarChange: onAvatarFileChange,
+    handleAvatarRemove,
+  } = useAvatarUpload({ onAvatarChange: handleAvatarChange });
 
-  const handleAvatarClick = () => fileInputRef.current?.click();
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        setValue("avatar", ev.target?.result as string, {
-          shouldValidate: true,
-        });
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
+  const onSubmit = useCallback(() => {
+    const formData = getValues();
+    const resetForm = () => reset(getValues());
+    handlePatientSubmit(formData, resetForm);
+  }, [getValues, reset, handlePatientSubmit]);
 
-  const onSubmit = () => {
-    if (id) {
-      handleUpdate();
-    } else {
-      handleCreate();
-    }
-  };
+  // Преобразуем мониторинги в формат для MonitoringBlock
+  const transformedMonitorings = monitorings.map((m, idx) => ({
+    id: m.id,
+    number: idx + 1,
+    dateStart: m.dateStart || 0,
+    dateEnd: m.dateEnd,
+    pregnancyWeek: m.pregnancyWeek || 0,
+    status: m.status ? (m.status.toLowerCase() as "active" | "completed") : null,
+    result: m.result,
+    percent: m.percent,
+  }));
 
   return (
     <form
@@ -154,8 +64,9 @@ const PatientsFormPage = () => {
       autoComplete="off"
     >
       <h2 className="mb-2 text-3xl font-extrabold text-[#3B82F6]">
-        Карточка пациента
+        {isEditMode ? "Редактирование пациента" : "Новый пациент"}
       </h2>
+      
       <div className="max-w-8xl grid w-full grid-cols-1 gap-8 md:grid-cols-2">
         <div className="flex flex-col gap-8">
           <ProfileBlock
@@ -163,7 +74,8 @@ const PatientsFormPage = () => {
             errors={errors}
             fileInputRef={fileInputRef}
             handleAvatarClick={handleAvatarClick}
-            handleAvatarChange={handleAvatarChange}
+            handleAvatarChange={onAvatarFileChange}
+            handleAvatarRemove={handleAvatarRemove}
           />
         </div>
         <div className="flex flex-col gap-8">
@@ -171,29 +83,17 @@ const PatientsFormPage = () => {
         </div>
       </div>
 
-      <MonitoringBlock
-        data={
-          monitorings.map((m, idx) => ({
-            id: m.id,
-            number: idx + 1,
-            dateStart: m.dateStart || 0,
-            dateEnd: m.dateEnd,
-            pregnancyWeek: m.pregnancyWeek || 0,
-            status: m.status
-              ? (m.status.toLowerCase() as "active" | "completed")
-              : null,
-            result: m.result,
-          })) || []
-        }
-      />
+      {isEditMode && (
+        <MonitoringBlock data={transformedMonitorings} />
+      )}
 
       <button
         type="submit"
-        className={`mt-4 w-full max-w-md rounded-lg bg-[#10B981] py-2 text-base font-semibold text-white shadow transition-colors hover:bg-[#059669] disabled:cursor-not-allowed disabled:bg-[#F3F4F6] disabled:text-[#6B7280]`}
+        className="mt-4 w-full max-w-md rounded-lg bg-[#10B981] py-2 text-base font-semibold text-white shadow transition-colors hover:bg-[#059669] disabled:cursor-not-allowed disabled:bg-[#F3F4F6] disabled:text-[#6B7280]"
         style={{ minWidth: 180 }}
         disabled={!isDirty}
       >
-        Сохранить
+        {isEditMode ? "Сохранить изменения" : "Создать пациента"}
       </button>
     </form>
   );

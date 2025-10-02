@@ -1,5 +1,6 @@
 import axios from "axios";
 import { notification } from "antd";
+import type { Monitoring } from "../monitoring/api";
 
 // Типы
 export interface Patient {
@@ -14,7 +15,7 @@ export interface Patient {
   anamnesis: string;
   doctorNotes: string;
   avatar: string | null;
-  monitorings: any[]; // Замените на Monitoring[], если Monitoring импортируется
+  monitorings: Monitoring[];
 }
 
 export interface FormDataDto {
@@ -48,7 +49,7 @@ export async function getPatients(): Promise<Patient[] | undefined> {
 
 export async function createPatient(patient: FormDataDto): Promise<Patient | undefined> {
   try {
-    const url = import.meta.env.VITE_API_URL + "/api/patient/create";
+    const url = import.meta.env.VITE_API_URL + "/api/patient";
     const res = await axios.post<Patient>(url, patient);
     return res.data;
   } catch (error) {

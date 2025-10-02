@@ -6,6 +6,7 @@ import { updateMonitoring } from "../../../../service/monitoring/api";
 
 interface FormData {
   pregnancyWeek: string | number;
+  percent: string | number;
   diagnosis: string;
   notes: string;
   ph: string | number;
@@ -22,6 +23,7 @@ interface MonitoringInfoProps {
   pregnancyWeek?: number | null;
   status?: string | null;
   result?: string | null;
+  percent?: number | null;
   diagnosis?: string;
   notes?: string;
   medicalTests?: {
@@ -48,6 +50,7 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
   pregnancyWeek,
   status,
   result,
+  percent,
   diagnosis = "",
   notes = "",
   medicalTests,
@@ -56,6 +59,7 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
 
   const getDefaultValues = useCallback(() => ({
     pregnancyWeek: pregnancyWeek || "",
+    percent: percent || "",
     diagnosis,
     notes,
     ph: medicalTests?.ph || "",
@@ -63,7 +67,7 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
     сarbonDioxide: medicalTests?.сarbonDioxide || "",
     be: medicalTests?.be || "",
     lac: medicalTests?.lac || "",
-  }), [pregnancyWeek, diagnosis, notes, medicalTests]);
+  }), [pregnancyWeek, percent, diagnosis, notes, medicalTests]);
 
   const { control, handleSubmit, reset, formState: { isDirty } } = useForm({
     defaultValues: getDefaultValues(),
@@ -117,7 +121,7 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
   };
 
   const getStatusText = (status: string | null) => {
-    return status === "Active" ? "🟢 АКТИВЕН" : "⚫ ЗАВЕРШЁН";
+    return status === "Active" ? "🟢 АКТИВЕН" : "ЗАВЕРШЁН";
   };
 
   const getSaveButtonStyles = () => {
@@ -132,6 +136,7 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
     pregnancyWeek: data.pregnancyWeek ? Number(data.pregnancyWeek) : null,
     status: status as "Active" | "Completed" | null,
     result: result as "Regular" | "Risk" | "Hypoxia" | null,
+    percent: data.percent ? Number(data.percent) : null,
     medicalTests: {
       ph: data.ph ? Number(data.ph) : null,
       glu: data.glu ? Number(data.glu) : null,
@@ -191,7 +196,7 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
         <div className="bg-gray-50 rounded p-3">
           <div className="text-xs text-gray-600">Начало</div>
           <div className="font-semibold text-sm">{startDateTime.date}</div>
@@ -227,6 +232,26 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
             )}
           />
         </div>
+
+        <div className="bg-green-50 rounded p-3">
+          <div className="text-xs text-green-700 mb-1">Процент</div>
+          <Controller
+            name="percent"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                size="small"
+                placeholder="0.00"
+                className="text-sm font-semibold"
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+              />
+            )}
+          />
+        </div>
       </div>
 
       <div className="mb-4">
@@ -247,6 +272,8 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
                     size="small"
                     placeholder="—"
                     className="text-sm font-medium"
+                    type="number"
+                    step="0.01"
                   />
                 )}
               />

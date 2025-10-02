@@ -18,6 +18,7 @@ export interface Monitoring {
   pregnancyWeek: number | null;
   status: MonitoringStatus | null;
   result: MonitoringResult | null;
+  percent: number | null;
   medicalTests: {
     ph: number | null;
     glu: number | null;
@@ -106,6 +107,7 @@ export async function updateMonitoring(id: string, monitoringData: Omit<Monitori
     pregnancyWeek: monitoringData.pregnancyWeek,
     status: monitoringData.status,
     result: monitoringData.result,
+    percent: monitoringData.percent,
     medicalTests: monitoringData.medicalTests,
     diagnosis: monitoringData.diagnosis,
     notes: monitoringData.notes
