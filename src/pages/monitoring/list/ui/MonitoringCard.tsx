@@ -3,7 +3,7 @@ import InfoLabel, {
   type InfoLabelColor,
 } from "../../../../components/ui/InfoLabel";
 import styles from "./MonitoringCard.module.scss";
-import type { MonitoringListItem } from "../api/types";
+import type { MonitoringListItem } from "../../../../service/monitoring/api";
 
 const statusMap: Record<string, { label: string; color: InfoLabelColor }> = {
   Active: {
@@ -44,14 +44,11 @@ const MonitoringCard: React.FC<MonitoringListItem> = ({
         })
       : "—";
 
-  // Вариант 3: акцентная верхняя полоса-статус, крупный результат с иконкой, четкая сетка, читаемость
-  // Можно добавить иконки результата (например, SVG), если есть в проекте
   return (
     <div
       className={`relative flex flex-col overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#FFFFFF] shadow-[0_4px_24px_0_#E5E7EB] transition-shadow select-none hover:shadow-[0_8px_32px_0_#E5E7EB] ${styles["monitoring-card-anim"]}`}
       style={{ minHeight: 200 }}
     >
-      {/* Верхняя акцентная полоса-статус */}
       <div
         className={`h-2 w-full ${
           statusInfo?.color === "blue"
@@ -61,9 +58,7 @@ const MonitoringCard: React.FC<MonitoringListItem> = ({
               : "bg-[#F3F4F6]"
         }`}
       />
-      {/* Контент */}
       <div className="flex flex-1 flex-col gap-3 p-5">
-        {/* ФИО и статус */}
         <div className="mb-1 flex items-center justify-between">
           <span
             className="max-w-[70%] truncate text-lg font-bold"
@@ -77,11 +72,9 @@ const MonitoringCard: React.FC<MonitoringListItem> = ({
             </InfoLabel>
           )}
         </div>
-        {/* Крупный результат с иконкой и аннотацией */}
         <div className="mb-1 flex flex-col">
           <span className="mb-0.5 text-xs text-[#6B7280]">Результат</span>
           <div className="flex items-center gap-2">
-            {/* Иконка результата */}
             {result === "Regular" && (
               <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
                 <circle cx="10" cy="10" r="10" fill="#10B981" />
@@ -132,7 +125,6 @@ const MonitoringCard: React.FC<MonitoringListItem> = ({
             </span>
           </div>
         </div>
-        {/* Сетка данных */}
         <div className="grid grid-cols-3 gap-4 text-sm">
           <div className="flex flex-col">
             <span className="text-[#6B7280]">Начало</span>
@@ -151,7 +143,6 @@ const MonitoringCard: React.FC<MonitoringListItem> = ({
             <span className="font-medium">{pregnancyWeek ?? "—"}</span>
           </div>
         </div>
-        {/* Диагноз */}
         <div className="mt-2 flex flex-col">
           <span className="text-sm text-[#6B7280]">Диагноз</span>
           <span

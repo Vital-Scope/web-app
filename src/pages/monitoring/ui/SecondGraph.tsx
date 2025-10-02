@@ -17,7 +17,7 @@ const SecondGraph = ({ x_arr, y_arr, monitoringId }: Props) => {
     return undefined;
   }, [x_arr, y_arr]);
 
-  const { ucData, isConnected } = useSignalRSensors({ initialData, monitoringId });
+  const { ucData } = useSignalRSensors({ initialData, monitoringId });
 
   const [layout, setLayout] = useState<any>({
     title: {

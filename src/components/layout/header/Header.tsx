@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useSessionStore } from "../../../store/useSessionStore";
 
 const Header = () => {
-  const { data, loading, startPolling, stopPolling, deviceStatus } = useSessionStore();
+  const { data, startPolling, stopPolling, deviceStatus } = useSessionStore();
 
   useEffect(() => {
     startPolling();
