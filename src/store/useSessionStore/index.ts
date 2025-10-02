@@ -1,5 +1,6 @@
 import axios from "axios";
 import { create } from "zustand";
+import { getStatus } from "../../service/proxy";
 
 interface Session {
   status: "Active" | "Completed";
@@ -14,6 +15,8 @@ interface SessionStore {
   data: Session | null;
   loading: boolean;
   error: string | null;
+  deviceStatus: boolean;
+  deviceLoading: boolean;
   startPolling: () => void;
   stopPolling: () => void;
   updateSession: (monitoringId: string) => void;
@@ -21,6 +24,7 @@ interface SessionStore {
 
 export const useSessionStore = create<SessionStore>((set, get) => {
   let intervalId: any = null;
+  let deviceIntervalId: any = null;
 
   const fetchData = async () => {
     try {
@@ -30,6 +34,16 @@ export const useSessionStore = create<SessionStore>((set, get) => {
       set({ data: res.data, loading: false });
     } catch (e: any) {
       set({ data: null, loading: false });
+    }
+  };
+
+  const fetchDeviceStatus = async () => {
+    try {
+      set({ deviceLoading: true });
+      const status = await getStatus();
+      set({ deviceStatus: status, deviceLoading: false });
+    } catch (error) {
+      set({ deviceStatus: false, deviceLoading: false });
     }
   };
 
@@ -56,17 +70,29 @@ export const useSessionStore = create<SessionStore>((set, get) => {
     data: null,
     loading: false,
     error: null,
+    deviceStatus: true,
+    deviceLoading: false,
 
     startPolling: () => {
       if (intervalId) return;
       fetchData();
       intervalId = setInterval(fetchData, 5000);
+      
+      // Запускаем polling статуса устройства
+      if (!deviceIntervalId) {
+        fetchDeviceStatus();
+        deviceIntervalId = setInterval(fetchDeviceStatus, 10000);
+      }
     },
 
     stopPolling: () => {
       if (intervalId) {
         clearInterval(intervalId);
         intervalId = null;
+      }
+      if (deviceIntervalId) {
+        clearInterval(deviceIntervalId);
+        deviceIntervalId = null;
       }
     },
 
