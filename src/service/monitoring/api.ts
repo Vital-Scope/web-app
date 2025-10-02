@@ -72,7 +72,7 @@ export async function createMonitoring(patientId: string) {
       description: "Мониторинг успешно создан для выбранного пациента.",
     });
     return response.data;
-  } catch (error) {
+  } catch {
     notification.error({
       message: "Ошибка",
       description: "Не удалось создать мониторинг.",
@@ -93,5 +93,37 @@ export async function getMonitorings(): Promise<MonitoringListItem[]> {
     });
     console.error("Ошибка при получении мониторингов:", error);
     return [];
+  }
+}
+
+export async function updateMonitoring(id: string, monitoringData: Omit<Monitoring, "sensors" | "id" | "createdAt" | "updatedAt" | "patientId" | "fullName">): Promise<Monitoring | undefined> {
+  const url = import.meta.env.VITE_API_URL + "/api/monitoring/update";
+  
+  const requestData = {
+    id,
+    dateStart: monitoringData.dateStart,
+    dateEnd: monitoringData.dateEnd,
+    pregnancyWeek: monitoringData.pregnancyWeek,
+    status: monitoringData.status,
+    result: monitoringData.result,
+    medicalTests: monitoringData.medicalTests,
+    diagnosis: monitoringData.diagnosis,
+    notes: monitoringData.notes
+  };
+  
+  try {
+    const response = await axios.put<Monitoring>(url, requestData);
+    notification.success({
+      message: "Мониторинг обновлен",
+      description: "Данные мониторинга успешно обновлены.",
+    });
+    return response.data;
+  } catch (error) {
+    notification.error({
+      message: "Ошибка",
+      description: "Не удалось обновить мониторинг.",
+    });
+    console.error("Ошибка при обновлении мониторинга:", error);
+    return undefined;
   }
 }

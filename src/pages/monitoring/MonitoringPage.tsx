@@ -37,26 +37,12 @@ const Monitoring = () => {
 
 
   const xarr = useMemo(() => {
-    const set = Array.from(new Set(first_arr?.map((el) => el.time)));
-    return set;
+    return first_arr?.map((el) => el.time);
   }, [first_arr]);
 
-  const first_xarr = useMemo(() => {
-    return Array.from(
-      new Set(
-        data?.sensors
-          .filter((val) => val.channel === "Fhr")
-          .map((val) => val.time)
-          .sort(),
-      ),
-    ).slice(0, 40);
-  }, [data?.sensors]);
-
-  const first_yarr = useMemo(() => {
-    return data?.sensors
-      .filter((val) => val.channel === "Fhr")
-      .map((val) => val.value);
-  }, [data?.sensors]);
+  const yarr = useMemo(() => {
+    return first_arr?.map((el) => el.value);
+  }, [first_arr]);
 
   const isCurrent = id && sessionData?.monitoringId === id;
   const buttonText = isCurrent ? "Закончить мониторинг" : "Начать мониторинг";
@@ -95,8 +81,10 @@ const Monitoring = () => {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div className="md:col-span-2">
             <MonitoringInfo
+              monitoringId={id}
               dateStart={data?.dateStart}
               dateEnd={data?.dateEnd}
+              pregnancyWeek={data?.pregnancyWeek}
               status={data?.status}
               result={data?.result}
               diagnosis={data?.diagnosis}
@@ -122,7 +110,7 @@ const Monitoring = () => {
             buttonText
           )}
         </PrimaryButton>
-        <FirstGraph x_arr={xarr} y_arr={first_yarr} />
+        <FirstGraph x_arr={xarr} y_arr={yarr} />
 
         <div className="mt-4 flex justify-end gap-4">
           <button className="rounded-lg border border-[#8B5CF6] bg-white px-5 py-2 font-semibold text-[#8B5CF6] transition hover:bg-[#F3F4F6]">
