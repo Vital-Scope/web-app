@@ -7,13 +7,15 @@ import PatientInfo from "./ui/patientInfo";
 import { useSessionStore } from "../../store/useSessionStore";
 import { getPatientById } from "../../service/patients";
 import FirstGraph from "./ui/FirstGraph";
+import SecondGraph from "./ui/SecondGraph";
 import PrimaryButton from "../../components/button/PrimaryButton";
-import { Spin } from "antd";
+import { LoadingSpinner } from "../../components/ui";
 import { startStreaming, stopStreaming } from "../../service/proxy";
 
 const Monitoring = () => {
   const { updateSession, data: sessionData } = useSessionStore();
   const [loading, setLoading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const id = useParams().id as string;
 
   const { data, refetch } = useQuery({
@@ -29,26 +31,38 @@ const Monitoring = () => {
     enabled: !!data?.patientId,
   });
 
-  const first_arr = useMemo(
+  const fhr_arr = useMemo(
     () => data?.sensors.filter((el) => el.channel === "Fhr"),
     [data],
   );
 
-  const xarr = useMemo(() => {
-    return first_arr?.map((el) => el.time);
-  }, [first_arr]);
+  const uc_arr = useMemo(
+    () => data?.sensors.filter((el) => el.channel === "Uc"),
+    [data],
+  );
 
-  const yarr = useMemo(() => {
-    return first_arr?.map((el) => el.value);
-  }, [first_arr]);
+  const fhr_xarr = useMemo(() => {
+    return fhr_arr?.map((el) => el.time);
+  }, [fhr_arr]);
+
+  const fhr_yarr = useMemo(() => {
+    return fhr_arr?.map((el) => el.value);
+  }, [fhr_arr]);
+
+  const uc_xarr = useMemo(() => {
+    return uc_arr?.map((el) => el.time);
+  }, [uc_arr]);
+
+  const uc_yarr = useMemo(() => {
+    return uc_arr?.map((el) => el.value);
+  }, [uc_arr]);
 
   const isCurrent = id && sessionData?.monitoringId === id;
   const buttonText = isCurrent ? "Закончить мониторинг" : "Начать мониторинг";
-  const loadingText = isCurrent ? "Завершение..." : "Запуск мониторинга...";
-  const isVisibleButton = data?.status === null;
+  const isVisibleButton = data?.status !== "Completed";
 
   const getButtonColor = () => {
-    if (loading) {
+    if (loading || isProcessing) {
       return "bg-[#6B7280] hover:bg-[#6B7280] focus:ring-[#6B7280] cursor-not-allowed opacity-70";
     }
     return isCurrent
@@ -61,20 +75,36 @@ const Monitoring = () => {
     try {
       if (!isCurrent) {
         await startStreaming(id);
+        await updateSession(id);
       } else {
+        setIsProcessing(true);
         await stopStreaming(id);
-        setTimeout(refetch, 2000);
+        await updateSession(id);
+        refetch();
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        setIsProcessing(false);
       }
-      await updateSession(id);
     } catch (error) {
       console.error(error);
+      setIsProcessing(false);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB]">
+    <div className="min-h-screen bg-[#F9FAFB] relative">
+      {isProcessing && (
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50" style={{ left: '220px' }}>
+          <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md mx-4">
+            <LoadingSpinner 
+              message="Идет обработка обученной моделью..."
+              size="large"
+            />
+          </div>
+        </div>
+      )}
+      
       <div className="max-w-8xl mx-auto flex flex-col gap-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <div className="md:col-span-2">
@@ -99,19 +129,19 @@ const Monitoring = () => {
           <PrimaryButton
             onClick={clickHandler}
             className={getButtonColor()}
-            disabled={loading}
+            disabled={loading || isProcessing}
           >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <Spin size="small" />
-                {loadingText}
-              </span>
-            ) : (
-              buttonText
-            )}
+            {buttonText}
           </PrimaryButton>
         )}
-        <FirstGraph x_arr={xarr} y_arr={yarr} />
+        <div className="grid grid-cols-1 gap-6">
+          <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6 shadow-sm">
+            <FirstGraph x_arr={fhr_xarr} y_arr={fhr_yarr} monitoringId={id} />
+          </div>
+          <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6 shadow-sm">
+            <SecondGraph x_arr={uc_xarr} y_arr={uc_yarr} monitoringId={id} />
+          </div>
+        </div>
 
         <div className="mt-4 flex justify-end gap-4">
           <button className="rounded-lg border border-[#8B5CF6] bg-white px-5 py-2 font-semibold text-[#8B5CF6] transition hover:bg-[#F3F4F6]">

@@ -8,20 +8,20 @@ interface Props {
   monitoringId?: string;
 }
 
-const FirstGraph = ({ x_arr, y_arr, monitoringId }: Props) => {
+const SecondGraph = ({ x_arr, y_arr, monitoringId }: Props) => {
   // Подготавливаем данные из API для передачи в хук
   const initialData = useMemo(() => {
     if (x_arr && y_arr) {
-      return { fhr: { x: x_arr, y: y_arr } };
+      return { uc: { x: x_arr, y: y_arr } };
     }
     return undefined;
   }, [x_arr, y_arr]);
 
-  const { fhrData } = useSignalRSensors({ initialData, monitoringId });
+  const { ucData, isConnected } = useSignalRSensors({ initialData, monitoringId });
 
   const [layout, setLayout] = useState<any>({
     title: {
-      text: "Частота сердечных сокращений",
+      text: "Тонус матки",
       font: {
         color: "#F9FAFB",
         size: 28,
@@ -31,20 +31,20 @@ const FirstGraph = ({ x_arr, y_arr, monitoringId }: Props) => {
       x: 0.05,
       xanchor: "left",
     },
-    paper_bgcolor: "#111827", // карточка чуть светлее фона
-    plot_bgcolor: "#1F2937", // глубокий темный фон
+    paper_bgcolor: "#111827",
+    plot_bgcolor: "#1F2937",
     height: 400,
     margin: { l: 50, r: 15, t: 60, b: 50 },
     xaxis: {
       showgrid: true,
-      gridcolor: "#374151", // сетка темно-серая
+      gridcolor: "#374151",
       zeroline: false,
-      linecolor: "#6B7280", // ось
+      linecolor: "#6B7280",
       tickfont: { color: "#F3F4F6", size: 14, family: "Inter, sans-serif" },
       title: {
         text: "Время",
         font: {
-          color: "#8B5CF6",
+          color: "#F472B6",
           size: 16,
           family: "Inter, sans-serif",
           weight: 600,
@@ -59,9 +59,9 @@ const FirstGraph = ({ x_arr, y_arr, monitoringId }: Props) => {
       linecolor: "#6B7280",
       tickfont: { color: "#F3F4F6", size: 14, family: "Inter, sans-serif" },
       title: {
-        text: "Показатель",
+        text: "Тонус (мм рт.ст.)",
         font: {
-          color: "#8B5CF6",
+          color: "#F472B6",
           size: 16,
           family: "Inter, sans-serif",
           weight: 600,
@@ -77,35 +77,35 @@ const FirstGraph = ({ x_arr, y_arr, monitoringId }: Props) => {
         yref: "y",
         x0: 0,
         x1: 1,
-        y0: 110,
-        y1: 160,
-        fillcolor: "rgba(16,185,129,0.10)", // зелёный (акцент) с прозрачностью
-        line: { width: 0 },
-        layer: "below",
-      },
-      // Верхняя зона (опасно)
-      {
-        type: "rect",
-        xref: "paper",
-        yref: "y",
-        x0: 0,
-        x1: 1,
-        y0: 160,
-        y1: 300,
-        fillcolor: "rgba(139,92,246,0.10)", // фиолетовый (акцент) с прозрачностью
-        line: { width: 0 },
-        layer: "below",
-      },
-      // Нижняя зона (опасно)
-      {
-        type: "rect",
-        xref: "paper",
-        yref: "y",
-        x0: 0,
-        x1: 1,
         y0: 0,
-        y1: 110,
-        fillcolor: "rgba(244,114,182,0.10)", // розовый (акцент) с прозрачностью
+        y1: 20,
+        fillcolor: "rgba(16,185,129,0.10)",
+        line: { width: 0 },
+        layer: "below",
+      },
+      // Зона повышенного тонуса
+      {
+        type: "rect",
+        xref: "paper",
+        yref: "y",
+        x0: 0,
+        x1: 1,
+        y0: 20,
+        y1: 50,
+        fillcolor: "rgba(245,158,11,0.10)",
+        line: { width: 0 },
+        layer: "below",
+      },
+      // Зона высокого тонуса
+      {
+        type: "rect",
+        xref: "paper",
+        yref: "y",
+        x0: 0,
+        x1: 1,
+        y0: 50,
+        y1: 100,
+        fillcolor: "rgba(244,114,182,0.10)",
         line: { width: 0 },
         layer: "below",
       },
@@ -114,7 +114,6 @@ const FirstGraph = ({ x_arr, y_arr, monitoringId }: Props) => {
     dragmode: "pan",
     hovermode: "x unified",
     font: { color: "#F3F4F6", family: "Inter, sans-serif" },
-    // Скругление и тень для карточки (визуально через Tailwind, но для Plotly — только цвет)
   });
 
   const handleRelayout = (figure: Plotly.PlotRelayoutEvent) => {
@@ -142,21 +141,21 @@ const FirstGraph = ({ x_arr, y_arr, monitoringId }: Props) => {
       <Plot
         data={[
           {
-            x: fhrData.x,
-            y: fhrData.y,
+            x: ucData.x,
+            y: ucData.y,
             type: "scatter",
             mode: "lines+markers",
-            line: { color: "#8B5CF6", width: 3, shape: "spline" },
+            line: { color: "#F472B6", width: 3, shape: "spline" },
             marker: {
               size: 6,
-              color: "#3B82F6",
+              color: "#E94560",
               line: { color: "#F9FAFB", width: 0.5 },
               symbol: "dot",
             },
-            name: "channel 0",
+            name: "channel 1",
             hoverlabel: {
               bgcolor: "#111827",
-              bordercolor: "#8B5CF6",
+              bordercolor: "#F472B6",
               font: { color: "#F9FAFB", family: "Inter, sans-serif" },
             },
           },
@@ -180,4 +179,5 @@ const FirstGraph = ({ x_arr, y_arr, monitoringId }: Props) => {
   );
 };
 
-export default React.memo(FirstGraph);
+export default React.memo(SecondGraph);
+
