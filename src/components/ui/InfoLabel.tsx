@@ -1,6 +1,12 @@
 import React from "react";
 
-export type InfoLabelColor = "blue" | "green" | "red" | "purple" | "gray" | "orange";
+export type InfoLabelColor =
+  | "blue"
+  | "green"
+  | "red"
+  | "purple"
+  | "gray"
+  | "orange";
 
 const colorMap: Record<
   InfoLabelColor,
@@ -52,7 +58,7 @@ const InfoLabel: React.FC<InfoLabelProps> = ({
   const c = colorMap[color];
   return (
     <span
-      className={`rounded-full border ${c.border} ${c.bg} px-2 py-0.5 text-xs font-semibold ${c.text} shadow-sm ${className || ""}`}
+      className={`rounded-full border  ${c.border} ${c.bg} px-2 py-0.5 text-xs font-semibold ${c.text} shadow-sm ${className || ""}`}
     >
       {children}
     </span>

@@ -20,7 +20,6 @@ const Monitoring = () => {
     queryKey: ["getMonitoringData", id],
     queryFn: () => getMonitoringById(id),
     enabled: !!id,
-
   });
 
   const { data: patient, isLoading: isPatientLoading } = useQuery({
@@ -35,7 +34,6 @@ const Monitoring = () => {
     [data],
   );
 
-
   const xarr = useMemo(() => {
     return first_arr?.map((el) => el.time);
   }, [first_arr]);
@@ -47,8 +45,8 @@ const Monitoring = () => {
   const isCurrent = id && sessionData?.monitoringId === id;
   const buttonText = isCurrent ? "Закончить мониторинг" : "Начать мониторинг";
   const loadingText = isCurrent ? "Завершение..." : "Запуск мониторинга...";
+  const isVisibleButton = data?.status === null;
 
-  // Определяем цвет кнопки в зависимости от состояния
   const getButtonColor = () => {
     if (loading) {
       return "bg-[#6B7280] hover:bg-[#6B7280] focus:ring-[#6B7280] cursor-not-allowed opacity-70";
@@ -97,20 +95,22 @@ const Monitoring = () => {
             <PatientInfo patient={patient} isLoading={isPatientLoading} />
           </div>
         </div>
-        <PrimaryButton
-          onClick={clickHandler}
-          className={getButtonColor()}
-          disabled={loading}
-        >
-          {loading ? (
-            <span className="flex items-center gap-2">
-              <Spin size="small" />
-              {loadingText}
-            </span>
-          ) : (
-            buttonText
-          )}
-        </PrimaryButton>
+        {isVisibleButton && (
+          <PrimaryButton
+            onClick={clickHandler}
+            className={getButtonColor()}
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <Spin size="small" />
+                {loadingText}
+              </span>
+            ) : (
+              buttonText
+            )}
+          </PrimaryButton>
+        )}
         <FirstGraph x_arr={xarr} y_arr={yarr} />
 
         <div className="mt-4 flex justify-end gap-4">

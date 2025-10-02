@@ -10,31 +10,47 @@ import { createMonitoring, getMonitorings, type MonitoringListItem } from "../..
 
 const sortOptions = [
   { value: "lastName", label: "По фамилии" },
-  { value: "firstName", label: "По имени" },
-  { value: "date", label: "По дате" },
-  { value: "status", label: "По готовности" },
+  { value: "dateStart", label: "По дате начала" },
+  { value: "result", label: "По результату" },
+  { value: "status", label: "По статусу" },
 ];
 
-function sortData(data: any[], sortBy: string) {
+function sortData(data: MonitoringListItem[], sortBy: string) {
   const sorted = [...data];
   switch (sortBy) {
     case "lastName":
-      sorted.sort((a, b) =>
-        (a.lastName || "").localeCompare(b.lastName || "", "ru"),
-      );
+      // Сортируем по фамилии из fullName
+      sorted.sort((a, b) => {
+        const aName = a.fullName || "";
+        const bName = b.fullName || "";
+        return aName.localeCompare(bName, "ru");
+      });
       break;
-    case "firstName":
-      sorted.sort((a, b) =>
-        (a.firstName || "").localeCompare(b.firstName || "", "ru"),
-      );
+    case "dateStart":
+      // Сортируем по дате начала (новые сверху)
+      sorted.sort((a, b) => {
+        const aDate = a.dateStart || 0;
+        const bDate = b.dateStart || 0;
+        return bDate - aDate;
+      });
       break;
-    case "date":
-      sorted.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    case "result":
+      // Сортируем по результату: Regular -> Risk -> Hypoxia
+      sorted.sort((a, b) => {
+        const resultOrder = { "Regular": 0, "Risk": 1, "Hypoxia": 2 };
+        const aOrder = resultOrder[a.result as keyof typeof resultOrder] ?? 3;
+        const bOrder = resultOrder[b.result as keyof typeof resultOrder] ?? 3;
+        return aOrder - bOrder;
+      });
       break;
     case "status":
-      sorted.sort((a, b) =>
-        a.status === b.status ? 0 : a.status === "ready" ? -1 : 1,
-      );
+      // Сортируем по статусу: Active -> Completed
+      sorted.sort((a, b) => {
+        const statusOrder = { "Active": 0, "Completed": 1 };
+        const aOrder = statusOrder[a.status as keyof typeof statusOrder] ?? 2;
+        const bOrder = statusOrder[b.status as keyof typeof statusOrder] ?? 2;
+        return aOrder - bOrder;
+      });
       break;
     default:
       break;
@@ -44,7 +60,7 @@ function sortData(data: any[], sortBy: string) {
 
 const MonitoringList = () => {
   const redirect = useNavigate();
-  const [sortBy, setSortBy] = React.useState("date");
+  const [sortBy, setSortBy] = React.useState("lastName");
   const [search, setSearch] = React.useState("");
   const [modal, contextHolder] = Modal.useModal();
   const { data = [] } = useQuery({
@@ -52,8 +68,8 @@ const MonitoringList = () => {
     queryFn: getMonitorings,
   });
 
-  const filtered = data.filter((item: any) =>
-    (item.patient?.lastName || "")
+  const filtered = data.filter((item: MonitoringListItem) =>
+    (item.fullName || "")
       .toLowerCase()
       .includes(search.trim().toLowerCase()),
   );

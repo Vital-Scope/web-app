@@ -45,13 +45,12 @@ const PatientsFormPage = () => {
     handlePatientSubmit(formData, resetForm);
   }, [getValues, reset, handlePatientSubmit]);
 
-  // Преобразуем мониторинги в формат для MonitoringBlock
   const transformedMonitorings = monitorings.map((m, idx) => ({
     id: m.id,
     number: idx + 1,
     dateStart: m.dateStart || 0,
     dateEnd: m.dateEnd,
-    pregnancyWeek: m.pregnancyWeek || 0,
+    pregnancyWeek: m.pregnancyWeek,
     status: m.status ? (m.status.toLowerCase() as "active" | "completed") : null,
     result: m.result,
     percent: m.percent,

@@ -2,14 +2,13 @@ import React from "react";
 import { Table } from "antd";
 import InfoLabel from "../../../../components/ui/InfoLabel";
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
 
 export type PregnancyHistoryRow = {
   id: string;
   number: number;
   dateStart: number;
   dateEnd: number | null;
-  pregnancyWeek: number;
+  pregnancyWeek: number | null;
   status: "active" | "completed" | null;
   result: string | null;
   percent: number | null;
@@ -70,7 +69,7 @@ const columns = [
     dataIndex: "pregnancyWeek",
     key: "pregnancyWeek",
     render: (value: number) => (
-      <span className="font-medium text-[#1F2937]">{value} нед.</span>
+      <span className="font-medium text-[#1F2937]">{value ? `${value} нед.` : '—'} </span>
     ),
   },
   {
@@ -106,12 +105,13 @@ const columns = [
     },
   },
   {
-    title: "Процент",
+    title: "Вероятность отклонений",
     dataIndex: "percent",
     key: "percent",
+    align: "center" as const,
     render: (value: number | null) => (
       <span className="font-medium text-[#1F2937]">
-        {value !== null ? `${value.toFixed(2)}%` : "-"}
+        {value !== null ? `${value * 100}%` : '—'}
       </span>
     ),
   },

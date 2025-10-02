@@ -6,7 +6,6 @@ import { updateMonitoring } from "../../../../service/monitoring/api";
 
 interface FormData {
   pregnancyWeek: string | number;
-  percent: string | number;
   diagnosis: string;
   notes: string;
   ph: string | number;
@@ -59,7 +58,6 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
 
   const getDefaultValues = useCallback(() => ({
     pregnancyWeek: pregnancyWeek || "",
-    percent: percent || "",
     diagnosis,
     notes,
     ph: medicalTests?.ph || "",
@@ -67,7 +65,7 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
     сarbonDioxide: medicalTests?.сarbonDioxide || "",
     be: medicalTests?.be || "",
     lac: medicalTests?.lac || "",
-  }), [pregnancyWeek, percent, diagnosis, notes, medicalTests]);
+  }), [pregnancyWeek, diagnosis, notes, medicalTests]);
 
   const { control, handleSubmit, reset, formState: { isDirty } } = useForm({
     defaultValues: getDefaultValues(),
@@ -136,7 +134,7 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
     pregnancyWeek: data.pregnancyWeek ? Number(data.pregnancyWeek) : null,
     status: status as "Active" | "Completed" | null,
     result: result as "Regular" | "Risk" | "Hypoxia" | null,
-    percent: data.percent ? Number(data.percent) : null,
+    percent: percent || null,
     medicalTests: {
       ph: data.ph ? Number(data.ph) : null,
       glu: data.glu ? Number(data.glu) : null,
@@ -193,6 +191,12 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
               {getResultText(result)}
             </div>
           )}
+          
+          {percent && (
+            <div className="px-3 py-1 rounded-md font-bold text-xs bg-orange-100 text-orange-800 border border-orange-200">
+              Вероятность отклонений: {percent * 100}%
+            </div>
+          )}
         </div>
       </div>
 
@@ -228,26 +232,6 @@ const MonitoringInfo: React.FC<MonitoringInfoProps> = ({
                 type="number"
                 min="1"
                 max="42"
-              />
-            )}
-          />
-        </div>
-
-        <div className="bg-green-50 rounded p-3">
-          <div className="text-xs text-green-700 mb-1">Процент</div>
-          <Controller
-            name="percent"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                size="small"
-                placeholder="0.00"
-                className="text-sm font-semibold"
-                type="number"
-                step="0.01"
-                min="0"
-                max="100"
               />
             )}
           />
