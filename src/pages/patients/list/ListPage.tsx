@@ -4,7 +4,7 @@ import { SearchInput, SortSelect } from "../../../components/ui";
 import DashboardItem from "./ui/Item";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPatients } from "./service";
+import { getPatients } from "../../../service/patients";
 
 const sortOptions = [
   { value: "lastName", label: "По фамилии" },
@@ -13,7 +13,7 @@ const sortOptions = [
 ];
 
 const PatientsListPage = () => {
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["patients"],
     queryFn: getPatients,
   });
@@ -63,7 +63,7 @@ const PatientsListPage = () => {
             lastName={patient.lastName}
             age={
               new Date().getFullYear() -
-              new Date(patient.birthDate).getFullYear()
+              new Date(patient.birthDate * 1000).getFullYear()
             }
             pregnancyWeek={patient.pregnancyWeek || 0}
             anamnesis={patient.anamnesis}

@@ -15,13 +15,21 @@ type Props = {
   handleAvatarChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const ProfileBlock: React.FC<Props> = ({ control, errors, fileInputRef, handleAvatarClick, handleAvatarChange }) => (
+const ProfileBlock: React.FC<Props> = ({
+  control,
+  errors,
+  fileInputRef,
+  handleAvatarClick,
+  handleAvatarChange,
+}) => (
   <div className="flex max-w-3xl flex-col gap-6 rounded-2xl border-2 border-[#E5E7EB] bg-white p-6 shadow transition-colors duration-200 focus-within:border-[#3B82F6] hover:border-[#3B82F6]">
-    <div className="mb-2 flex items-center gap-2 transition-colors duration-200 group-hover:text-[#3B82F6] group-focus-within:text-[#3B82F6]">
-      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#3B82F6] text-lg text-white transition-colors duration-200 group-hover:bg-[#3B82F6] group-focus-within:bg-[#3B82F6]">
+    <div className="mb-2 flex items-center gap-2 transition-colors duration-200 group-focus-within:text-[#3B82F6] group-hover:text-[#3B82F6]">
+      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#3B82F6] text-lg text-white transition-colors duration-200 group-focus-within:bg-[#3B82F6] group-hover:bg-[#3B82F6]">
         <UserOutlined />
       </span>
-      <span className="font-bold text-[#3B82F6] transition-colors duration-200 group-hover:text-[#3B82F6] group-focus-within:text-[#3B82F6]">Профиль пациента</span>
+      <span className="font-bold text-[#3B82F6] transition-colors duration-200 group-focus-within:text-[#3B82F6] group-hover:text-[#3B82F6]">
+        Профиль пациента
+      </span>
     </div>
     <div className="flex flex-col items-center gap-2">
       <div
@@ -75,7 +83,9 @@ const ProfileBlock: React.FC<Props> = ({ control, errors, fileInputRef, handleAv
           )}
         />
         {errors.lastName && (
-          <div className="mt-1 text-xs text-red-500">{errors.lastName.message as string}</div>
+          <div className="mt-1 text-xs text-red-500">
+            {errors.lastName.message as string}
+          </div>
         )}
       </div>
       <div>
@@ -94,7 +104,9 @@ const ProfileBlock: React.FC<Props> = ({ control, errors, fileInputRef, handleAv
           )}
         />
         {errors.firstName && (
-          <div className="mt-1 text-xs text-red-500">{errors.firstName.message as string}</div>
+          <div className="mt-1 text-xs text-red-500">
+            {errors.firstName.message as string}
+          </div>
         )}
       </div>
       <div>
@@ -113,11 +125,15 @@ const ProfileBlock: React.FC<Props> = ({ control, errors, fileInputRef, handleAv
           )}
         />
         {errors.middleName && (
-          <div className="mt-1 text-xs text-red-500">{errors.middleName.message as string}</div>
+          <div className="mt-1 text-xs text-red-500">
+            {errors.middleName.message as string}
+          </div>
         )}
       </div>
       <div>
-        <label className="mb-1 block text-xs text-[#6B7280]">Дата рождения</label>
+        <label className="mb-1 block text-xs text-[#6B7280]">
+          Дата рождения
+        </label>
         <Controller
           name="birthDate"
           control={control}
@@ -130,14 +146,18 @@ const ProfileBlock: React.FC<Props> = ({ control, errors, fileInputRef, handleAv
               size="large"
               style={{ width: "100%" }}
               locale={locale}
-              value={field.value ? dayjs(field.value) : undefined}
-              onChange={(date) => field.onChange(date ? date.valueOf() : undefined)}
+              value={field.value ? dayjs(field.value * 1000) : undefined}
+              onChange={(date) =>
+                field.onChange(date ? date.unix() : undefined)
+              }
               status={errors.birthDate ? "error" : undefined}
             />
           )}
         />
         {errors.birthDate && (
-          <div className="mt-1 text-xs text-red-500">{errors.birthDate.message as string}</div>
+          <div className="mt-1 text-xs text-red-500">
+            {errors.birthDate.message as string}
+          </div>
         )}
       </div>
       <div className="md:col-span-2">

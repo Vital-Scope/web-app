@@ -1,0 +1,8 @@
+.monitoring-card-anim {
+  transition: box-shadow 0.4s, background 0.4s, color 0.4s, transform 0.4s;
+}
+.monitoring-card-anim:hover {
+  background: #EFF6FF;
+  box-shadow: 0 0 16px #3B82F633;
+  transform: scale(1.03);
+}

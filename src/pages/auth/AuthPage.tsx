@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import { Alert, Button, Input, notification } from "antd";
+import { Button, Input, notification } from "antd";
 import {
   Controller,
   useForm,
@@ -10,7 +10,6 @@ import {
 import {
   UserOutlined,
   LockOutlined,
-  CloseCircleOutlined,
 } from "@ant-design/icons";
 import logo from "/2.png";
 import styles from "./authPage.module.scss";

@@ -1,19 +1,57 @@
 import MonitoringStatus from "./ui/MonitoringStatus";
 import Logo from "./ui/Logo";
+import { useEffect, useRef, useState } from "react";
+import { useSessionStore } from "../../../store/useSessionStore";
+import axios from "axios";
+import { getStatus } from "../../../service/proxy";
 
-const Header = () => (
-  <header className="z-10 flex h-[60px] w-full items-center border-b border-[#E5E7EB] bg-[#FFFFFF] shadow-md">
-    <div className="flex w-full items-center justify-between px-6">
-      <div className="flex items-center gap-3 select-none">
-        <Logo className="h-10 w-10" />
-        <span className="font-sans text-2xl font-extrabold tracking-tight">
-          <span className="text-[#F472B6]">Vital</span>
-          <span className="ml-1 font-light text-[#3B82F6]">Scope</span>
-        </span>
+const Header = () => {
+  const { data, loading, startPolling, stopPolling } = useSessionStore();
+  const [deviceStatus, setDeviceStatus] = useState(true);
+
+  const deviceRef = useRef<number | undefined>(undefined);
+
+  useEffect(() => {
+    startPolling();
+    return () => stopPolling();
+  }, [startPolling, stopPolling]);
+
+  useEffect(() => {
+    const getDeviceStatus = async () => {
+      const status = await getStatus();
+      setDeviceStatus(status);
+    }
+    deviceRef.current = setInterval(getDeviceStatus, 10000);
+
+    return () => {
+      clearInterval(deviceRef.current);
+    }
+  }, []);
+
+  const patientName =
+    data && (data.lastName || data.firstName)
+      ? `${data.lastName || "—"} ${data.firstName || "—"}`.trim()
+      : "—";
+
+  return (
+    <header className="z-10 flex h-[60px] w-full items-center border-b border-[#E5E7EB] bg-[#FFFFFF] shadow-md">
+      <div className="flex w-full items-center justify-between px-6">
+        <div className="flex items-center gap-3 select-none">
+          <Logo className="h-10 w-10" />
+          <span className="font-sans text-2xl font-extrabold tracking-tight">
+            <span className="text-[#F472B6]">Vital</span>
+            <span className="ml-1 font-light text-[#3B82F6]">Scope</span>
+          </span>
+        </div>
+        <MonitoringStatus
+          patient={patientName}
+          isActive={data?.status === "Active"}
+          monitoringId={data?.monitoringId}
+          deviceStatus={deviceStatus}
+        />
       </div>
-      <MonitoringStatus patient="Мария Иванова" isActive={undefined} />
-    </div>
-  </header>
-);
+    </header>
+  );
+};
 
 export default Header;
