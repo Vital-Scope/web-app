@@ -1,6 +1,6 @@
 # Web App — React + TypeScript + Vite
 
-Современное одностраничное приложение на React 19 и Vite 7 с TypeScript, Tailwind и Ant Design. Проект собирается в Docker и разворачивается через Nginx, поддерживает SPA‑роутинг (`react-router`).
+Frontend часть сервиса VITAL-SCOPE на React 19 и Vite 7 с TypeScript, Tailwind и Ant Design. Проект собирается в Docker и разворачивается через Nginx, поддерживает SPA‑роутинг (`react-router`).
 
 ## Стек
 - **React 19**, **TypeScript 5**, **Vite 7**
